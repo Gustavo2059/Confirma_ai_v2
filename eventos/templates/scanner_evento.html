@@ -1,0 +1,427 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Scanner do Evento{% endblock %}
+{% block page_title %}Scanner do Evento{% endblock %}
+
+{% block extra_css %}
+<style>
+    .scanner-wrapper {
+        display: flex;
+        justify-content: center;
+        padding: 24px;
+    }
+
+    .scanner-card {
+        width: 100%;
+        max-width: 560px;
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 8px 30px rgba(15, 43, 69, 0.12);
+        padding: 24px;
+    }
+
+    .scanner-card h2 {
+        margin: 0 0 8px;
+        color: #0f2b45;
+        text-align: center;
+    }
+
+    .scanner-card p {
+        text-align: center;
+        color: #667;
+        margin-bottom: 8px;
+    }
+
+    .evento-info {
+        margin: 18px 0 20px;
+        padding: 14px 16px;
+        background: #f6f9fc;
+        border: 1px solid #e3ebf3;
+        border-radius: 12px;
+    }
+
+    .evento-info p {
+        text-align: left;
+        margin: 6px 0;
+        color: #334;
+    }
+
+    #reader {
+        width: 100%;
+        min-height: 280px;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #f4f7fb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #e3ebf3;
+    }
+
+    #camera-placeholder {
+        text-align: center;
+        color: #8a97a6;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 20px;
+    }
+
+    #camera-placeholder .camera-icon {
+        font-size: 54px;
+        line-height: 1;
+    }
+
+    #camera-placeholder p {
+        margin: 0;
+        font-size: 15px;
+        color: #7a8794;
+        font-weight: 600;
+    }
+
+    .scanner-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 18px;
+        flex-wrap: wrap;
+    }
+
+    .scanner-actions button,
+    .scanner-actions a {
+        flex: 1;
+        min-width: 140px;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 700;
+        transition: 0.2s ease;
+        text-align: center;
+        text-decoration: none;
+        box-sizing: border-box;
+    }
+
+    .scanner-actions button:hover,
+    .scanner-actions a:hover {
+        transform: translateY(-1px);
+    }
+
+    .btn-start {
+        background: #0f2b45;
+        color: #fff;
+    }
+
+    .btn-stop {
+        background: #e9eef3;
+        color: #0f2b45;
+    }
+
+    .btn-back {
+        background: #f3f6f9;
+        color: #0f2b45;
+        border: 1px solid #d7e1ea;
+    }
+
+    .scanner-status {
+        margin-top: 14px;
+        font-size: 0.95rem;
+        color: #0f2b45;
+        text-align: center;
+        min-height: 24px;
+        font-weight: 600;
+    }
+
+    .scanner-help {
+        margin-top: 12px;
+        font-size: 0.85rem;
+        color: #7a8794;
+        text-align: center;
+    }
+
+    .scanner-result {
+        margin-top: 16px;
+        padding: 12px 14px;
+        border-radius: 10px;
+        text-align: center;
+        font-weight: 700;
+        min-height: 24px;
+        background: #f8fafc;
+        border: 1px solid #e6edf5;
+        color: #334;
+    }
+
+    .scanner-result.success {
+        background: #edf9f0;
+        border-color: #b9e7c3;
+        color: #1f7a35;
+    }
+
+    .scanner-result.warning {
+        background: #fff7e8;
+        border-color: #ffd591;
+        color: #b26a00;
+    }
+
+    .scanner-result.error {
+        background: #fff1f0;
+        border-color: #ffa39e;
+        color: #cf1322;
+    }
+
+    /* Popup Style */
+    .popup-alert {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .popup-content {
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        max-width: 300px;
+    }
+
+    #close-popup-btn {
+        background-color: #0f2b45;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #close-popup-btn:hover {
+        background-color: #333;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="scanner-wrapper">
+    <div class="scanner-card">
+        <h2>Leitor de QR Code</h2>
+        <p>Aponte a câmera para o QR Code do participante.</p>
+
+        <div class="evento-info">
+            <p><strong>Evento:</strong> {{ evento.name }}</p>
+            <p><strong>Data:</strong> {{ evento.date|date:"d/m/Y" }}</p>
+            <p><strong>Local:</strong> {{ evento.location }}</p>
+        </div>
+
+        <div id="reader">
+            <div id="camera-placeholder">
+                <div class="camera-icon">📷</div>
+                <p>Clique em "Abrir câmera"</p>
+            </div>
+        </div>
+
+        <div class="scanner-actions">
+            <button type="button" class="btn-start" id="start-btn">Abrir câmera</button>
+            <button type="button" class="btn-stop" id="stop-btn">Parar câmera</button>
+            <a href="{% url 'detail_event' evento.pk %}" class="btn-back">Voltar</a>
+        </div>
+
+        <div class="scanner-status" id="status">Aguardando abertura da câmera...</div>
+
+        <div class="scanner-help">
+            Ao ler o QR Code, a presença será registrada automaticamente neste evento.
+        </div>
+
+        <div class="scanner-result" id="resultado"></div>
+    </div>
+</div>
+
+<!-- Pop-up Alert -->
+<div id="popup-alert" class="popup-alert">
+    <div class="popup-content">
+        <p id="popup-message"></p>
+        <button id="close-popup-btn">Fechar</button>
+    </div>
+</div>
+
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    const statusEl = document.getElementById("status");
+    const startBtn = document.getElementById("start-btn");
+    const stopBtn = document.getElementById("stop-btn");
+    const resultado = document.getElementById("resultado");
+
+    const html5QrCode = new Html5Qrcode("reader");
+
+    let isRunning = false;
+    let ultimaLeitura = null;
+    let bloqueado = false;
+
+    function limparResultadoClasses() {
+        resultado.classList.remove("success", "warning", "error");
+    }
+
+    function restaurarPlaceholderSeNecessario() {
+        const reader = document.getElementById("reader");
+        const placeholder = document.getElementById("camera-placeholder");
+
+        if (!placeholder) {
+            reader.innerHTML = `
+                <div id="camera-placeholder">
+                    <div class="camera-icon">📷</div>
+                    <p>Clique em "Abrir câmera"</p>
+                </div>
+            `;
+        }
+    }
+
+    function removerPlaceholder() {
+        const placeholder = document.getElementById("camera-placeholder");
+        if (placeholder) {
+            placeholder.remove();
+        }
+    }
+
+    function showPopup(message) {
+        const popup = document.getElementById("popup-alert");
+        const messageElement = document.getElementById("popup-message");
+        messageElement.textContent = message;
+        popup.style.display = "flex";
+
+        const closeBtn = document.getElementById("close-popup-btn");
+        closeBtn.addEventListener("click", function() {
+            popup.style.display = "none";
+        });
+    }
+
+    function onScanSuccess(decodedText, decodedResult) {
+        if (bloqueado || ultimaLeitura === decodedText) {
+            return;
+        }
+
+        bloqueado = true;
+        ultimaLeitura = decodedText;
+
+        statusEl.textContent = "QR Code lido. Registrando presença...";
+
+        fetch("{% url 'registrar_presenca' evento.pk %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            body: JSON.stringify({
+                qr_code: decodedText
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            limparResultadoClasses();
+
+            if (data.success) {
+                resultado.innerHTML = "✅ " + data.message;
+                resultado.classList.add("success");
+                statusEl.textContent = "Presença registrada com sucesso. Continue escaneando.";
+                showPopup("Presença registrada com sucesso!"); // Exibe o pop-up
+            } else {
+                resultado.innerHTML = "⚠️ " + data.message;
+                resultado.classList.add("warning");
+                statusEl.textContent = "Leitura concluída, mas houve um aviso.";
+                showPopup("Prensença já Registrada ⚠️."); // Exibe o pop-up
+            }
+
+            setTimeout(() => {
+                bloqueado = false;
+            }, 2000);
+        })
+        .catch(error => {
+            limparResultadoClasses();
+            resultado.innerHTML = "❌ Erro ao registrar presença.";
+            resultado.classList.add("error");
+            statusEl.textContent = "Erro ao registrar presença. Tente novamente.";
+            showPopup("Erro ao registrar presença. Tente novamente."); // Exibe o pop-up
+
+            setTimeout(() => {
+                bloqueado = false;
+            }, 2000);
+        });
+    }
+
+    function onScanFailure(errorMessage) {
+        // Mantido vazio para não poluir a tela a cada frame sem leitura
+    }
+
+    async function startScanner() {
+        if (isRunning) {
+            statusEl.textContent = "A câmera já está aberta.";
+            return;
+        }
+
+        try {
+            statusEl.textContent = "Solicitando acesso à câmera...";
+
+            removerPlaceholder();
+
+            await html5QrCode.start(
+                { facingMode: "environment" },
+                {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 }
+                },
+                onScanSuccess,
+                onScanFailure
+            );
+
+            isRunning = true;
+            statusEl.textContent = "Câmera aberta. Aponte para o QR Code.";
+        } catch (error) {
+            console.error(error);
+            restaurarPlaceholderSeNecessario();
+            statusEl.textContent = "Não foi possível abrir a câmera. Verifique a permissão do navegador.";
+        }
+    }
+
+    async function stopScanner() {
+        if (!isRunning) {
+            statusEl.textContent = "A câmera já está parada.";
+            return;
+        }
+
+        try {
+            await html5QrCode.stop();
+            await html5QrCode.clear();
+            isRunning = false;
+            restaurarPlaceholderSeNecessario();
+            statusEl.textContent = "Câmera parada.";
+        } catch (error) {
+            console.error(error);
+            statusEl.textContent = "Erro ao parar a câmera.";
+        }
+    }
+
+    startBtn.addEventListener("click", startScanner);
+    stopBtn.addEventListener("click", stopScanner);
+</script>
+{% endblock %}

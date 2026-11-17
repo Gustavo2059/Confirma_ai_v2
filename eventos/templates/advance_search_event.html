@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+
+{% block title %}Pesquisa Avançada de Eventos{% endblock %}
+
+{% block page_title %}Pesquisa Avançada de Eventos{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 28px;
+    }
+    .page-header h1 { font-size: 1.5rem; font-weight: 700; color: #0f2b45; }
+    .page-header .count {
+        background: #e3f0fb; color: #1a4971; padding: 4px 14px;
+        border-radius: 20px; font-size: 0.78rem; font-weight: 600; margin-left: 10px;
+    }
+
+    .filter-card {
+        background: #fff; border-radius: 16px;
+        box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+        padding: 28px; margin-bottom: 28px;
+    }
+    .filter-card .filter-title {
+        font-size: 0.95rem; font-weight: 700; color: #0f2b45;
+        margin-bottom: 20px;
+    }
+    .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+    }
+    .filter-group label {
+        display: block; font-size: 0.78rem; font-weight: 600;
+        color: #1a4971; margin-bottom: 6px;
+        text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .filter-group input,
+    .filter-group select {
+        width: 100%; padding: 10px 14px; border: 2px solid #d0dce8;
+        border-radius: 10px; font-size: 0.88rem; font-family: 'Inter', sans-serif;
+        outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+        background: #fff;
+    }
+    .filter-group input:focus,
+    .filter-group select:focus {
+        border-color: #4fc3f7; box-shadow: 0 0 0 3px rgba(79,195,247,0.15);
+    }
+    .filter-actions {
+        display: flex; justify-content: center; margin-top: 20px;
+    }
+    .btn-search {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 10px 32px; background: linear-gradient(135deg, #1a4971, #0f2b45);
+        color: #fff; border-radius: 10px; font-size: 0.88rem; font-weight: 600;
+        border: none; cursor: pointer; transition: all 0.25s;
+        box-shadow: 0 4px 14px rgba(15,43,69,0.25);
+        font-family: inherit;
+    }
+    .btn-search:hover {
+        transform: translateY(-2px); box-shadow: 0 6px 20px rgba(15,43,69,0.35);
+    }
+
+    .table-card {
+        background: #fff; border-radius: 16px;
+        box-shadow: 0 2px 16px rgba(0,0,0,0.06); overflow: hidden;
+    }
+    .event-table { width: 100%; border-collapse: collapse; }
+    .event-table thead { background: #0f2b45; color: #fff; }
+    .event-table th {
+        padding: 14px 20px; text-align: left; font-size: 0.78rem;
+        text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
+    }
+    .event-table td {
+        padding: 14px 20px; font-size: 0.88rem;
+        border-bottom: 1px solid #eef2f6; color: #2c3e50;
+        vertical-align: middle;
+    }
+    .event-table tbody tr { transition: background 0.15s; }
+    .event-table tbody tr:hover { background: #f0f7ff; }
+    .event-table tbody tr:last-child td { border-bottom: none; }
+
+    .empty-state { text-align: center; padding: 60px 20px; color: #7f8c97; }
+    .empty-state .empty-icon { font-size: 3rem; margin-bottom: 12px; }
+
+    .results-header {
+        display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px;
+    }
+    .results-header h2 { font-size: 1.15rem; font-weight: 700; color: #0f2b45; }
+    .results-header .count {
+        background: #e3f0fb; color: #1a4971; padding: 4px 14px;
+        border-radius: 20px; font-size: 0.78rem; font-weight: 600;
+    }
+
+    .actions-cell {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;  /* Garante que os botões fiquem centralizados */
+}
+
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 10px 20px;  /* Ajusta o padding para uniformizar o tamanho dos botões */
+    border-radius: 8px;
+    font-size: 0.85rem;  /* Define o mesmo tamanho de fonte para todos os botões */
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    min-width: 130px;  /* Largura mínima para garantir consistência */
+    height: 40px;  /* Definindo a altura uniforme */
+}
+
+.btn-detail {
+    background: #e3f0fb;
+    color: #1a4971;
+}
+
+.btn-detail:hover {
+    background: #1a4971;
+    color: #fff;
+}
+
+.btn-edit {
+    background: #fef9e7;
+    color: #b7950b;
+}
+
+.btn-edit:hover {
+    background: #f1c40f;
+    color: #fff;
+}
+
+.btn-delete {
+    background: #fdecea;
+    color: #c0392b;
+}
+
+.btn-delete:hover {
+    background: #e74c3c;
+    color: #fff;
+}
+
+    @media (max-width: 768px) {
+        .filter-grid { grid-template-columns: 1fr; }
+        .event-table th, .event-table td { padding: 10px 12px; font-size: 0.82rem; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1>Pesquisa Avançada de Eventos</h1>
+</div>
+
+<div class="filter-card">
+    <div class="filter-title">Filtros de Busca</div>
+    <form method="get" action="{% url 'advance_search_event' %}">
+        {% csrf_token %}
+        <div class="filter-grid">
+            <div class="filter-group">
+                <label for="id_name">Nome do Evento</label>
+                {{ form.name }}
+            </div>
+            <div class="filter-group">
+                <label for="id_date">Data</label>
+                {{ form.date }}
+            </div>
+            <div class="filter-group">
+                <label for="id_start_time">Hora de Início</label>
+                {{ form.start_time }}
+            </div>
+            <div class="filter-group">
+                <label for="id_end_time">Hora de Término</label>
+                {{ form.end_time }}
+            </div>
+            <div class="filter-group">
+                <label for="id_location">Localização</label>
+                {{ form.location }}
+            </div>
+        </div>
+        <div class="filter-actions">
+            <button type="submit" class="btn-search">Buscar</button>
+        </div>
+    </form>
+</div>
+
+<div class="results-header">
+    <h2>Eventos encontrados</h2>
+    {% if events %}
+        <span class="count">{{ events|length }}</span>
+    {% endif %}
+</div>
+
+{% if events %}
+<div class="table-card">
+    <table class="event-table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Data</th>
+                <th>Hora de Início</th>
+                <th>Hora de Término</th>
+                <th>Localização</th>
+                <th>Ações</th>  <!-- Coluna de Ações -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            <tr>
+                <td>{{ event.name }}</td>
+                <td>{{ event.date|date:"d/m/Y" }}</td>
+                <td>{{ event.start_time }}</td>
+                <td>{{ event.end_time }}</td>
+                <td>{{ event.location }}</td>
+                <td>
+                    <div class="actions-cell">
+                        <a href="{% url 'detail_event' event.pk %}" class="btn-action btn-detail">👁 Detalhes</a>
+                        <a href="{% url 'update_event' event.pk %}" class="btn-action btn-edit">✏️ Editar</a>
+                        <form method="post" action="{% url 'delete_event' event.pk %}">
+                            {% csrf_token %}
+                            <button
+                                type="submit"
+                                class="btn-action btn-delete"
+                                onclick="return confirm('Tem certeza que deseja excluir este evento?')">
+                                🗑 Excluir
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="table-card">
+    <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <p>Nenhum evento encontrado com os filtros aplicados.</p>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

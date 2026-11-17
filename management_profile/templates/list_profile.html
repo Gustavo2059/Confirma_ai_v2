@@ -1,0 +1,345 @@
+{% extends "base.html" %}
+
+{% block title %}Lista de Perfis{% endblock %}
+
+{% block page_title %}Lista de Perfis{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 28px;
+    }
+
+    .page-header h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #0f2b45;
+    }
+
+    .page-header .count {
+        background: #e3f0fb;
+        color: #1a4971;
+        padding: 4px 14px;
+        border-radius: 20px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        margin-left: 10px;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .btn-import {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: linear-gradient(135deg, #1a4971, #0f2b45);
+        color: #fff;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.25s;
+        box-shadow: 0 4px 14px rgba(15,43,69,0.25);
+    }
+
+    .btn-import:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(15,43,69,0.35);
+        background: linear-gradient(135deg, #2196F3, #1a4971);
+    }
+
+    .search-box {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 24px;
+    }
+
+    .search-box input {
+        flex: 1;
+        padding: 12px 18px;
+        border: 2px solid #d0dce8;
+        border-radius: 12px;
+        font-size: 0.92rem;
+        font-family: 'Inter', sans-serif;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        background: #fff;
+    }
+
+    .search-box input:focus {
+        border-color: #4fc3f7;
+        box-shadow: 0 0 0 3px rgba(79,195,247,0.15);
+    }
+
+    .table-card {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+    .profile-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .profile-table thead {
+        background: #0f2b45;
+        color: #fff;
+    }
+
+    .profile-table th {
+        padding: 14px 20px;
+        text-align: left;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
+    }
+
+    .profile-table td {
+        padding: 14px 20px;
+        font-size: 0.88rem;
+        border-bottom: 1px solid #eef2f6;
+        color: #2c3e50;
+        vertical-align: middle;
+    }
+
+    .profile-table tbody tr {
+        transition: background 0.15s;
+    }
+
+    .profile-table tbody tr:hover {
+        background: #f0f7ff;
+    }
+
+    .profile-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* Modificação para centralizar as ações */
+    .profile-table th:last-child {
+        text-align: center;  /* Centraliza o título "Ações" no cabeçalho */
+    }
+
+    .actions-cell {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;  /* Garante que os botões fiquem centralizados dentro da célula */
+        padding-right: 10px;  /* Adiciona um pequeno espaço à direita dos botões */
+    }
+
+    .actions-cell form {
+        margin: 0;
+        display: inline;
+    }
+
+    .btn-action {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+        min-width: 120px;  /* Garante largura mínima para todos os botões */
+        height: 40px;  /* Define uma altura uniforme para os botões */
+        justify-content: center;  /* Alinha o texto no centro */
+    }
+
+    .btn-detail {
+        background: #e3f0fb;
+        color: #1a4971;
+    }
+
+    .btn-detail:hover {
+        background: #1a4971;
+        color: #fff;
+    }
+
+    .btn-edit {
+        background: #fef9e7;
+        color: #b7950b;
+    }
+
+    .btn-edit:hover {
+        background: #f1c40f;
+        color: #fff;
+    }
+
+    .btn-delete {
+        background: #fdecea;
+        color: #c0392b;
+    }
+
+    .btn-delete:hover {
+        background: #e74c3c;
+        color: #fff;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #7f8c97;
+    }
+
+    .empty-state .empty-icon {
+        font-size: 3rem;
+        margin-bottom: 12px;
+    }
+
+    .empty-state p {
+        font-size: 0.95rem;
+    }
+
+    .no-match-row td {
+        text-align: center;
+        color: #7f8c97;
+        font-style: italic;
+        padding: 32px 20px;
+    }
+
+    @media (max-width: 768px) {
+        .profile-table th:nth-child(2),
+        .profile-table td:nth-child(2) {
+            display: none;
+            padding: 10px 12px; 
+            font-size: 0.82rem; 
+        }
+
+        .header-actions {
+            width: 100%;
+        }
+
+        .btn-import {
+            flex: 1;
+            justify-content: center;
+        }
+
+        .actions-cell {
+            flex-direction: column;
+            gap: 4px;
+            align-items: stretch;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>📋 Perfis cadastrados <span class="count" id="countBadge">{{ profiles|length }}</span></h1>
+    <div class="header-actions">
+        <a href="{% url 'import_profiles' %}" class="btn-import">📥 Importar Perfis</a>
+        <a href="{% url 'new_profile' %}" class="btn-import">➕ Adicionar Perfis</a>
+        <a href="{% url 'profiles_pdf' %}" class="btn-import"> 📄 Gerar PDF dos Perfis </a>
+        <a href="{% url 'advance_search_profile' %}" class="btn-import">🔎 Busca Avançada </a>
+    </div>
+</div>
+
+<div class="search-box">
+    <input type="text" id="liveSearch" placeholder="🔍 Filtrar por nome, CPF ou email..." autocomplete="off">
+</div>
+
+{% if profiles %}
+<div class="table-card">
+    <table class="profile-table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Email</th>
+                <th>Cargo</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="profileBody">
+            {% for profile in profiles %}
+            <tr class="profile-row">
+                <td><strong>{{ profile.name }}</strong></td>
+                <td>{{ profile.cpf|slice:":3" }}.{{ profile.cpf|slice:"3:6" }}.{{ profile.cpf|slice:"6:9" }}-{{ profile.cpf|slice:"9:11" }}</td>
+                <td>{{ profile.email }}</td>
+                <td>{{ profile.role }}</td>
+                <td>
+                    <div class="actions-cell">
+                        <a href="{% url 'profile_detail' profile.pk %}" class="btn-action btn-detail">👁 Ver detalhes</a>
+                        <a href="{% url 'update_profile' profile.pk %}" class="btn-action btn-edit">✏️ Editar</a>
+
+                        <form method="post" action="{% url 'delete_profile' profile.pk %}">
+                            {% csrf_token %}
+                            <button
+                                type="submit"
+                                class="btn-action btn-delete"
+                                onclick="return confirm('Tem certeza que deseja excluir este perfil?')">
+                                🗑 Excluir
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            <tr class="no-match-row" id="noMatch" style="display:none;">
+                <td colspan="4">Nenhum resultado encontrado para sua busca.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="table-card">
+    <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <p>Nenhum perfil encontrado.</p>
+    </div>
+</div>
+{% endif %}
+
+<script>
+    const input = document.getElementById('liveSearch');
+    const rows = document.querySelectorAll('.profile-row');
+    const noMatch = document.getElementById('noMatch');
+    const badge = document.getElementById('countBadge');
+
+    function normalizeText(text) {
+        return text
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .trim();
+    }
+
+    if (input) {
+        input.addEventListener('input', function() {
+            const term = normalizeText(this.value);
+            let visible = 0;
+
+            rows.forEach(row => {
+                const rowText = normalizeText(row.textContent);
+                const match = rowText.includes(term);
+
+                row.style.display = match ? '' : 'none';
+                if (match) visible++;
+            });
+
+            if (badge) badge.textContent = visible;
+            if (noMatch) noMatch.style.display = visible === 0 ? '' : 'none';
+        });
+    }
+</script>
+{% endblock %}

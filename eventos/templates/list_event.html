@@ -1,0 +1,338 @@
+{% extends "base.html" %}
+
+{% block title %}Lista de Eventos{% endblock %}
+
+{% block page_title %}Lista de Eventos{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 28px;
+    }
+
+    .page-header h1 {
+        font-size: 1.5rem; 
+        font-weight: 700; 
+        color: #0f2b45; 
+    }
+
+    .page-header .count {
+        background: #e3f0fb; 
+        color: #1a4971; 
+        padding: 4px 14px;
+        border-radius: 20px; 
+        font-size: 0.78rem; 
+        font-weight: 600; 
+        margin-left: 10px;
+    }
+
+    .header-actions { 
+        display: flex;
+        gap: 10px; 
+        align-items: center;
+        flex-wrap: wrap; 
+
+    }
+
+    .btn-new {
+        display: inline-flex; 
+        align-items: center; gap: 8px;
+        padding: 10px 22px;
+        background: linear-gradient(135deg, #1a4971, #0f2b45);
+        color: #fff; 
+        border-radius: 10px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none; 
+        transition: all 0.25s;
+        box-shadow: 0 4px 14px rgba(15,43,69,0.25);
+    }
+
+    .btn-new:hover {
+        transform: translateY(-2px); 
+        box-shadow: 0 6px 20px rgba(15,43,69,0.35); 
+        background: linear-gradient(135deg, #2196F3, #1a4971);
+    }
+
+    .search-box { 
+        display: flex; 
+        gap: 10px; 
+        margin-bottom: 24px; 
+    }
+
+    .search-box input {
+        flex: 1; 
+        padding: 12px 18px; 
+        border: 2px solid #d0dce8; 
+        border-radius: 12px;
+        font-size: 0.92rem; 
+        font-family: 'Inter', sans-serif;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s; 
+        background: #fff;
+    }
+
+    .search-box input:focus { 
+        border-color: #4fc3f7; 
+        box-shadow: 0 0 0 3px rgba(79,195,247,0.15); 
+    }
+
+    .table-card {
+        background: #fff; 
+        border-radius: 16px;
+        box-shadow: 0 2px 16px rgba(0,0,0,0.06); 
+        overflow: hidden;
+    }
+
+    .event-table { 
+        width: 100%; 
+        border-collapse: collapse; 
+    }
+
+    .event-table thead { 
+        background: #0f2b45; 
+        color: #fff; 
+    }
+
+    .event-table th {
+        padding: 14px 20px; 
+        text-align: left; 
+        font-size: 0.78rem;
+        text-transform: uppercase; 
+        letter-spacing: 1px; 
+        font-weight: 600;
+    }
+
+    .event-table td {
+        padding: 14px 20px; 
+        font-size: 0.88rem;
+        border-bottom: 1px solid #eef2f6;
+        color: #2c3e50;
+        vertical-align: middle;
+        text-align: left;
+    }
+
+    .event-table tbody tr { 
+        transition: background 0.15s; 
+    }
+
+    .event-table tbody tr:hover { 
+        background: #f0f7ff; 
+    }
+
+    .event-table tbody tr:last-child td { 
+        border-bottom: none; 
+    }
+
+    .event-table th:last-child {
+        text-align: center;
+    }
+
+    .actions-cell { 
+        display: flex; 
+        gap: 8px; 
+        flex-wrap: wrap; 
+        align-items: center; 
+        justify-content: center;
+        padding-right: 10px;
+    }
+
+    .actions-cell form {
+        margin: 0;
+        display: inline;
+    }
+
+    .btn-action {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+        min-width: 120px;
+        height: 40px;
+        justify-content: center;
+    }
+
+    .btn-detail { 
+        background: #e3f0fb; 
+        color: #1a4971; 
+    }
+
+    .btn-detail:hover { 
+        background: #1a4971; 
+        color: #fff; 
+    }
+
+    .btn-edit { 
+        background: #fef9e7; 
+        color: #b7950b; 
+    }
+
+    .btn-edit:hover { 
+        background: #f1c40f; 
+        color: #fff; 
+    }
+
+
+    .btn-delete { 
+        background: #fdecea;
+        color: #c0392b; 
+    }
+
+    .btn-delete:hover { 
+        background: #e74c3c; 
+        color: #fff; 
+    }
+
+    .empty-state { 
+        text-align: center; 
+        padding: 60px 20px; 
+        color: #7f8c97; 
+    }
+
+    .empty-state .empty-icon { 
+        font-size: 3rem; 
+        margin-bottom: 12px; 
+    }
+    
+    .empty-state p {
+        font-size: 0.95rem;
+    }
+
+    .no-match-row td { 
+        text-align: center; 
+        color: #7f8c97; 
+        font-style: italic; 
+        padding: 32px 20px; }
+
+    @media (max-width: 768px) {
+        .event-table th:nth-child(2),
+        .event-table td:nth-child(2) { 
+            display: none;
+            padding: 10px 12px; 
+            font-size: 0.82rem; 
+        }
+
+        .header-actions {
+            width: 100%;
+        }
+
+        .btn-new {
+            flex: 1;
+            justify-content: center;
+        }
+
+        .actions-cell { 
+            flex-direction: column; 
+            gap: 4px; 
+            align-items: stretch; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>📅 Eventos cadastrados <span class="count" id="countBadge">{{ events|length }}</span></h1>
+    <div class="header-actions">
+        <a href="{% url 'new_event' %}" class="btn-new">Novo Evento</a>
+        <a href="{% url 'advance_search_event' %}" class="btn-new">Busca Avançada</a>
+    </div>
+</div>
+
+<div class="search-box">
+    <input type="text" id="liveSearch" placeholder="🔍 Buscar eventos...">
+</div>
+
+{% if events %}
+<div class="table-card">
+    <table class="event-table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Data</th>
+                <th>Local</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            {% for event in events %}
+            <tr class="event-row">
+                <td>{{ event.name }}</td>
+                <td>{{ event.date|date:"d/m/Y" }}</td>
+                <td>{{ event.location }}</td>
+                <td>
+                    <div class="actions-cell">
+                        <a href="{% url 'detail_event' event.pk %}" class="btn-action btn-detail">👁 Detalhes</a>
+                        <a href="{% url 'update_event' event.pk %}" class="btn-action btn-edit">✏️ Editar</a>
+
+                        <form method="post" action="{% url 'delete_event' event.pk %}">
+                            {% csrf_token %}
+                            <button
+                                type="submit"
+                                class="btn-action btn-delete"
+                                onclick="return confirm('Tem certeza que deseja excluir este evento?')">
+                                🗑 Excluir
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            <tr class="no-match-row" id="noMatch" style="display:none;">
+                <td colspan="4">Nenhum evento encontrado com esse filtro.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="table-card empty-state">
+    <div class="empty-icon">📭</div>
+    <p>Nenhum evento cadastrado.</p>
+</div>
+{% endif %}
+
+<script> // Script para busca ao digitar
+    const input = document.getElementById('liveSearch');
+    const rows = document.querySelectorAll('.event-row');
+    const badge = document.getElementById('countBadge');
+    const noMatch = document.getElementById('noMatch');
+
+    function normalizeText(text) {
+        return text
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .trim();
+    }
+
+    if (input) {
+        input.addEventListener('input', function () {
+            const term = normalizeText(this.value);
+            let visible = 0;
+
+            rows.forEach(row => {
+                const rowText = normalizeText(row.textContent);
+                const match = rowText.includes(term);
+
+                row.style.display = match ? '' : 'none';
+                if (match) visible++;
+            });
+
+            if (badge) badge.textContent = visible;
+            if (noMatch) noMatch.style.display = visible === 0 ? '' : 'none';
+        });
+    }
+</script>
+{% endblock %}

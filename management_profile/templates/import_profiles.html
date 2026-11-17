@@ -1,0 +1,1601 @@
+{% extends "base.html" %}
+
+{% block title %}Importar Perfis{% endblock %}
+{% block page_title %}Importar Perfis{% endblock %}
+
+
+{% block extra_css %}
+<style>
+
+    /* =========================================================
+       CONTAINER PRINCIPAL
+    ========================================================= */
+
+    .form-wrapper {
+        width: 100%;
+        min-height: calc(100vh - 64px);
+
+        padding: 28px 32px;
+
+        box-sizing: border-box;
+
+        display: flex;
+        align-items: stretch;
+        justify-content: stretch;
+    }
+
+
+    /* =========================================================
+       CARD PRINCIPAL
+    ========================================================= */
+
+    .form-card {
+        width: 100%;
+        max-width: none;
+
+        min-height: calc(100vh - 120px);
+
+        background: #ffffff;
+
+        border-radius: 20px;
+
+        box-shadow:
+            0 8px 40px rgba(15, 43, 69, 0.12);
+
+        overflow: hidden;
+
+        display: flex;
+        flex-direction: column;
+    }
+
+
+    /* =========================================================
+       CABEÇALHO
+    ========================================================= */
+
+    .form-header {
+        background:
+            linear-gradient(
+                135deg,
+                #0f2b45,
+                #1a4971
+            );
+
+        color: #ffffff;
+
+        padding: 28px 36px;
+
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+
+    .form-header .icon {
+        width: 54px;
+        height: 54px;
+
+        border-radius: 14px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        flex-shrink: 0;
+
+        font-size: 2rem;
+
+        background: rgba(255, 255, 255, 0.12);
+
+        border: 1px solid
+            rgba(255, 255, 255, 0.15);
+    }
+
+
+    .form-header-text {
+        display: flex;
+        flex-direction: column;
+    }
+
+
+    .form-header h2 {
+        margin: 0 0 4px;
+
+        font-size: 1.45rem;
+
+        font-weight: 700;
+    }
+
+
+    .form-header p {
+        margin: 0;
+
+        font-size: 0.86rem;
+
+        opacity: 0.75;
+    }
+
+
+    /* =========================================================
+       CORPO
+    ========================================================= */
+
+    .form-body {
+        width: 100%;
+
+        flex: 1;
+
+        padding: 32px 36px 38px;
+
+        box-sizing: border-box;
+    }
+
+
+    /* =========================================================
+       LAYOUT PRINCIPAL
+    ========================================================= */
+
+    .import-layout {
+        display: grid;
+
+        grid-template-columns:
+            minmax(0, 1.35fr)
+            minmax(360px, 0.65fr);
+
+        gap: 28px;
+
+        align-items: start;
+    }
+
+
+    /* =========================================================
+       COLUNAS
+    ========================================================= */
+
+    .instructions-column,
+    .upload-column {
+        min-width: 0;
+    }
+
+
+    /* =========================================================
+       ORIENTAÇÕES
+    ========================================================= */
+
+    .import-instructions {
+        width: 100%;
+
+        box-sizing: border-box;
+
+        background: #f0f7ff;
+
+        border: 1px solid #c6def5;
+
+        border-left: 4px solid #2196F3;
+
+        border-radius: 14px;
+
+        padding: 22px 24px;
+    }
+
+
+    .import-instructions-title {
+        display: flex;
+        align-items: center;
+
+        gap: 8px;
+
+        margin: 0 0 12px;
+
+        color: #0f2b45;
+
+        font-size: 1rem;
+
+        font-weight: 700;
+    }
+
+
+    .import-instructions p {
+        margin: 0 0 12px;
+
+        color: #526779;
+
+        font-size: 0.86rem;
+
+        line-height: 1.55;
+    }
+
+
+    .import-instructions p:last-child {
+        margin-bottom: 0;
+    }
+
+
+    /* =========================================================
+       COLUNAS OBRIGATÓRIAS
+    ========================================================= */
+
+    .required-columns {
+        display: flex;
+        flex-wrap: wrap;
+
+        gap: 8px;
+
+        margin: 16px 0;
+    }
+
+
+    .column-badge {
+        display: inline-flex;
+
+        align-items: center;
+        justify-content: center;
+
+        background: #ffffff;
+
+        border: 1px solid #b9d7f2;
+
+        border-radius: 8px;
+
+        padding: 7px 12px;
+
+        color: #1a4971;
+
+        font-family: monospace;
+
+        font-size: 0.82rem;
+
+        font-weight: 700;
+    }
+
+
+    /* =========================================================
+       AVISO
+    ========================================================= */
+
+    .instructions-warning {
+        color: #92400e !important;
+
+        background: #fffbeb;
+
+        border: 1px solid #fde7a8;
+
+        border-radius: 9px;
+
+        padding: 11px 13px;
+
+        margin-top: 4px !important;
+    }
+
+
+    /* =========================================================
+       TABELA DE EXEMPLO
+    ========================================================= */
+
+    .example-table-wrapper {
+        width: 100%;
+
+        margin-top: 16px;
+
+        overflow-x: auto;
+
+        border-radius: 10px;
+    }
+
+
+    .example-table {
+        width: 100%;
+
+        min-width: 760px;
+
+        border-collapse: collapse;
+
+        font-size: 0.8rem;
+
+        background: #ffffff;
+    }
+
+
+    .example-table th,
+    .example-table td {
+        padding: 11px 13px;
+
+        border: 1px solid #dce8f3;
+
+        text-align: left;
+
+        white-space: nowrap;
+    }
+
+
+    .example-table th {
+        background: #e8f2fb;
+
+        color: #0f2b45;
+
+        font-family: monospace;
+
+        font-weight: 700;
+    }
+
+
+    .example-table td {
+        color: #607080;
+    }
+
+
+    /* =========================================================
+       ÁREA DIREITA
+    ========================================================= */
+
+    .upload-panel {
+        background: #ffffff;
+
+        border: 1px solid #dce8f3;
+
+        border-radius: 14px;
+
+        padding: 22px;
+
+        box-shadow:
+            0 4px 20px rgba(15, 43, 69, 0.06);
+    }
+
+
+    .upload-panel-title {
+        margin: 0 0 6px;
+
+        color: #0f2b45;
+
+        font-size: 1rem;
+
+        font-weight: 700;
+    }
+
+
+    .upload-panel-description {
+        margin: 0 0 18px;
+
+        color: #708090;
+
+        font-size: 0.82rem;
+
+        line-height: 1.5;
+    }
+
+
+    /* =========================================================
+       MENSAGENS DO DJANGO
+    ========================================================= */
+
+    .messages-list {
+        list-style: none;
+
+        padding: 0;
+
+        margin: 0 0 24px;
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 10px;
+    }
+
+
+    .msg {
+        padding: 12px 16px;
+
+        border-radius: 10px;
+
+        font-size: 0.85rem;
+
+        font-weight: 500;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 10px;
+    }
+
+
+    .msg.success {
+        background: #ecfdf5;
+
+        color: #065f46;
+
+        border-left: 4px solid #10b981;
+    }
+
+
+    .msg.error {
+        background: #fef2f2;
+
+        color: #991b1b;
+
+        border-left: 4px solid #dc2626;
+    }
+
+
+    .msg.warning {
+        background: #fffbeb;
+
+        color: #92400e;
+
+        border-left: 4px solid #f59e0b;
+    }
+
+
+    .msg.info {
+        background: #eff6ff;
+
+        color: #1e40af;
+
+        border-left: 4px solid #3b82f6;
+    }
+
+
+    /* =========================================================
+       ERROS
+    ========================================================= */
+
+    .form-errors {
+        margin-bottom: 16px;
+    }
+
+
+    .errorlist {
+        list-style: none;
+
+        padding: 0;
+
+        margin: 0;
+    }
+
+
+    .errorlist li {
+        background: #fef2f2;
+
+        color: #dc2626;
+
+        padding: 10px 14px;
+
+        border-radius: 8px;
+
+        font-size: 0.8rem;
+
+        border-left: 3px solid #dc2626;
+
+        margin-bottom: 8px;
+
+        line-height: 1.4;
+    }
+
+
+    /* =========================================================
+       UPLOAD
+    ========================================================= */
+
+    .upload-section {
+        margin-bottom: 20px;
+    }
+
+
+    .custom-file-upload {
+        min-height: 220px;
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        justify-content: center;
+
+        box-sizing: border-box;
+
+        padding: 32px 24px;
+
+        border: 2px dashed #b0c8e0;
+
+        border-radius: 14px;
+
+        background: #f4f8fc;
+
+        cursor: pointer;
+
+        transition: all 0.25s ease;
+
+        text-align: center;
+    }
+
+
+    .custom-file-upload:hover {
+        border-color: #4fc3f7;
+
+        background: #eaf4fd;
+
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 4px 16px
+            rgba(79, 195, 247, 0.15);
+    }
+
+
+    .custom-file-upload.dragover {
+        border-color: #2196F3;
+
+        background: #e3f2fd;
+
+        transform: scale(1.01);
+    }
+
+
+    .custom-file-upload .upload-icon {
+        font-size: 2.7rem;
+
+        margin-bottom: 12px;
+    }
+
+
+    .custom-file-upload .upload-text {
+        font-size: 1rem;
+
+        font-weight: 700;
+
+        color: #1a4971;
+
+        margin-bottom: 6px;
+    }
+
+
+    .custom-file-upload .upload-hint {
+        font-size: 0.8rem;
+
+        color: #7f8c97;
+    }
+
+
+    /* Django gera id_file */
+
+    #id_file {
+        display: none;
+    }
+
+
+    /* =========================================================
+       ARQUIVO SELECIONADO
+    ========================================================= */
+
+    .file-name-display {
+        display: none;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        gap: 10px;
+
+        margin-top: 14px;
+
+        padding: 13px 15px;
+
+        background: #ecfdf5;
+
+        border-radius: 10px;
+
+        font-size: 0.85rem;
+
+        font-weight: 500;
+
+        color: #065f46;
+
+        border: 1px solid #a7f3d0;
+    }
+
+
+    .file-name-display.active {
+        display: flex;
+    }
+
+
+    .file-info {
+        display: flex;
+
+        align-items: center;
+
+        gap: 8px;
+
+        overflow: hidden;
+    }
+
+
+    #fileNameText {
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+
+        white-space: nowrap;
+    }
+
+
+    .remove-file {
+        border: none;
+
+        background: transparent;
+
+        color: #991b1b;
+
+        cursor: pointer;
+
+        font-size: 1rem;
+
+        font-weight: 700;
+
+        padding: 4px 7px;
+
+        border-radius: 5px;
+
+        flex-shrink: 0;
+    }
+
+
+    .remove-file:hover {
+        background: #fee2e2;
+    }
+
+
+    /* =========================================================
+       BOTÕES
+    ========================================================= */
+
+    .form-actions {
+        display: flex;
+
+        gap: 12px;
+
+        margin-top: 16px;
+    }
+
+
+    .btn-submit {
+        flex: 1;
+
+        min-height: 48px;
+
+        padding: 14px 20px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #1a4971,
+                #0f2b45
+            );
+
+        color: #ffffff;
+
+        border: none;
+
+        border-radius: 12px;
+
+        font-size: 0.95rem;
+
+        font-weight: 700;
+
+        font-family: 'Inter', sans-serif;
+
+        cursor: pointer;
+
+        transition: all 0.25s;
+
+        box-shadow:
+            0 4px 16px
+            rgba(15, 43, 69, 0.25);
+    }
+
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 6px 24px
+            rgba(15, 43, 69, 0.35);
+
+        background:
+            linear-gradient(
+                135deg,
+                #2196F3,
+                #1a4971
+            );
+    }
+
+
+    .btn-submit:active {
+        transform: translateY(0);
+    }
+
+
+    .btn-submit:disabled {
+        opacity: 0.65;
+
+        cursor: not-allowed;
+
+        transform: none;
+    }
+
+
+    .btn-back {
+        min-height: 48px;
+
+        box-sizing: border-box;
+
+        padding: 14px 22px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        background: #f0f4f8;
+
+        color: #1a4971;
+
+        border: 2px solid #d0dce8;
+
+        border-radius: 12px;
+
+        font-size: 0.92rem;
+
+        font-weight: 600;
+
+        font-family: 'Inter', sans-serif;
+
+        text-decoration: none;
+
+        transition: all 0.2s;
+    }
+
+
+    .btn-back:hover {
+        background: #dceaf7;
+
+        border-color: #4fc3f7;
+    }
+
+
+    /* =========================================================
+       RESPONSIVO - NOTEBOOK / TABLET
+    ========================================================= */
+
+    @media (max-width: 1100px) {
+
+        .import-layout {
+            grid-template-columns: 1fr;
+        }
+
+
+        .custom-file-upload {
+            min-height: 180px;
+        }
+
+    }
+
+
+    /* =========================================================
+       RESPONSIVO - CELULAR
+    ========================================================= */
+
+    @media (max-width: 600px) {
+
+        .form-wrapper {
+            padding: 12px;
+        }
+
+
+        .form-card {
+            min-height: calc(100vh - 88px);
+
+            border-radius: 14px;
+        }
+
+
+        .form-header {
+            padding: 22px 20px;
+
+            gap: 13px;
+        }
+
+
+        .form-header .icon {
+            width: 46px;
+
+            height: 46px;
+
+            font-size: 1.6rem;
+        }
+
+
+        .form-header h2 {
+            font-size: 1.2rem;
+        }
+
+
+        .form-header p {
+            font-size: 0.76rem;
+        }
+
+
+        .form-body {
+            padding: 22px 18px 26px;
+        }
+
+
+        .import-instructions {
+            padding: 18px;
+        }
+
+
+        .upload-panel {
+            padding: 18px;
+        }
+
+
+        .form-actions {
+            flex-direction: column-reverse;
+        }
+
+
+        .btn-back,
+        .btn-submit {
+            width: 100%;
+        }
+
+
+        .custom-file-upload {
+            min-height: 160px;
+
+            padding: 24px 16px;
+        }
+
+    }
+
+</style>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="form-wrapper">
+
+    <div class="form-card">
+
+
+        <!-- =====================================================
+             CABEÇALHO
+        ====================================================== -->
+
+        <div class="form-header">
+
+            <div class="icon">
+                📤
+            </div>
+
+            <div class="form-header-text">
+
+                <h2>
+                    Importar Perfis
+                </h2>
+
+                <p>
+                    Envie uma planilha para cadastrar vários perfis de uma vez
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             CORPO
+        ====================================================== -->
+
+        <div class="form-body">
+
+
+            <!-- =================================================
+                 MENSAGENS
+            ================================================== -->
+
+            {% if messages %}
+
+                <ul class="messages-list">
+
+                    {% for message in messages %}
+
+                        <li class="msg {{ message.tags }}">
+                            {{ message }}
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            {% endif %}
+
+
+
+            <!-- =================================================
+                 ERROS GERAIS
+            ================================================== -->
+
+            {% if form.non_field_errors %}
+
+                <div class="form-errors">
+
+                    {{ form.non_field_errors }}
+
+                </div>
+
+            {% endif %}
+
+
+
+            <!-- =================================================
+                 LAYOUT
+            ================================================== -->
+
+            <div class="import-layout">
+
+
+                <!-- =============================================
+                     COLUNA ESQUERDA
+                ============================================== -->
+
+                <div class="instructions-column">
+
+                    <div class="import-instructions">
+
+
+                        <div class="import-instructions-title">
+
+                            📋 Formato obrigatório do arquivo Excel
+
+                        </div>
+
+
+                        <p>
+
+                            Para que a importação funcione corretamente,
+                            o arquivo deve possuir obrigatoriamente
+                            as seguintes colunas:
+
+                        </p>
+
+
+                        <!-- COLUNAS -->
+
+                        <div class="required-columns">
+
+                            <span class="column-badge">
+                                name
+                            </span>
+
+                            <span class="column-badge">
+                                email
+                            </span>
+
+                            <span class="column-badge">
+                                cpf
+                            </span>
+
+                            <span class="column-badge">
+                                phone
+                            </span>
+
+                            <span class="column-badge">
+                                role
+                            </span>
+
+                        </div>
+
+
+                        <p class="instructions-warning">
+
+                            ⚠️ Os nomes das colunas devem estar escritos
+
+                            <strong>
+                                exatamente dessa forma
+                            </strong>,
+
+                            utilizando letras minúsculas.
+
+                        </p>
+
+
+                        <p>
+
+                            Exemplo de estrutura válida:
+
+                        </p>
+
+
+
+                        <!-- =====================================
+                             TABELA DE EXEMPLO
+                        ====================================== -->
+
+                        <div class="example-table-wrapper">
+
+                            <table class="example-table">
+
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>name</th>
+
+                                        <th>email</th>
+
+                                        <th>cpf</th>
+
+                                        <th>phone</th>
+
+                                        <th>role</th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody>
+
+
+                                    <tr>
+
+                                        <td>
+                                            João Silva
+                                        </td>
+
+                                        <td>
+                                            joao@email.com
+                                        </td>
+
+                                        <td>
+                                            12345678900
+                                        </td>
+
+                                        <td>
+                                            48999999999
+                                        </td>
+
+                                        <td>
+                                            Organizador
+                                        </td>
+
+                                    </tr>
+
+
+                                    <tr>
+
+                                        <td>
+                                            Maria Souza
+                                        </td>
+
+                                        <td>
+                                            maria@email.com
+                                        </td>
+
+                                        <td>
+                                            98765432100
+                                        </td>
+
+                                        <td>
+                                            48988888888
+                                        </td>
+
+                                        <td>
+                                            Convidado
+                                        </td>
+
+                                    </tr>
+
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =============================================
+                     COLUNA DIREITA
+                ============================================== -->
+
+                <div class="upload-column">
+
+                    <div class="upload-panel">
+
+
+                        <h3 class="upload-panel-title">
+
+                            Selecionar planilha
+
+                        </h3>
+
+
+                        <p class="upload-panel-description">
+
+                            Escolha o arquivo contendo os perfis que
+                            deseja cadastrar no sistema.
+
+                        </p>
+
+
+
+                        <!-- =====================================
+                             FORMULÁRIO
+                        ====================================== -->
+
+                        <form
+                            method="post"
+                            enctype="multipart/form-data"
+                            id="importForm"
+                        >
+
+
+                            {% csrf_token %}
+
+
+
+                            <!-- =================================
+                                 UPLOAD
+                            ================================== -->
+
+                            <div class="upload-section">
+
+
+                                <label
+                                    for="{{ form.file.id_for_label }}"
+                                    class="custom-file-upload"
+                                    id="dropArea"
+                                >
+
+
+                                    <div class="upload-icon">
+
+                                        📁
+
+                                    </div>
+
+
+                                    <div class="upload-text">
+
+                                        Clique para selecionar o arquivo
+
+                                    </div>
+
+
+                                    <div class="upload-hint">
+
+                                        ou arraste e solte o arquivo aqui
+
+                                    </div>
+
+
+                                </label>
+
+
+
+                                {{ form.file }}
+
+
+
+                                <!-- =============================
+                                     ERRO DO ARQUIVO
+                                ============================== -->
+
+                                {% if form.file.errors %}
+
+                                    <div class="form-errors">
+
+                                        {{ form.file.errors }}
+
+                                    </div>
+
+                                {% endif %}
+
+
+
+                                <!-- =============================
+                                     ARQUIVO SELECIONADO
+                                ============================== -->
+
+                                <div
+                                    class="file-name-display"
+                                    id="fileNameDisplay"
+                                >
+
+
+                                    <div class="file-info">
+
+                                        <span>
+                                            ✅
+                                        </span>
+
+                                        <span id="fileNameText"></span>
+
+                                    </div>
+
+
+
+                                    <button
+                                        type="button"
+                                        class="remove-file"
+                                        id="removeFile"
+                                        title="Remover arquivo"
+                                    >
+
+                                        ✕
+
+                                    </button>
+
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <!-- =================================
+                                 AÇÕES
+                            ================================== -->
+
+                            <div class="form-actions">
+
+
+                                <a
+                                    href="{% url 'list_profile' %}"
+                                    class="btn-back"
+                                >
+
+                                    ← Voltar
+
+                                </a>
+
+
+
+                                <button
+                                    type="submit"
+                                    class="btn-submit"
+                                    id="submitButton"
+                                >
+
+                                    📤 Importar Perfis
+
+                                </button>
+
+
+                            </div>
+
+
+                        </form>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+    document.addEventListener(
+        'DOMContentLoaded',
+        function () {
+
+
+            /* ================================================
+               ELEMENTOS
+            ================================================= */
+
+            const fileInput =
+                document.getElementById('id_file');
+
+
+            const fileNameDisplay =
+                document.getElementById(
+                    'fileNameDisplay'
+                );
+
+
+            const fileNameText =
+                document.getElementById(
+                    'fileNameText'
+                );
+
+
+            const removeFile =
+                document.getElementById(
+                    'removeFile'
+                );
+
+
+            const dropArea =
+                document.getElementById(
+                    'dropArea'
+                );
+
+
+            const importForm =
+                document.getElementById(
+                    'importForm'
+                );
+
+
+            const submitButton =
+                document.getElementById(
+                    'submitButton'
+                );
+
+
+
+            /* ================================================
+               EXIBE O NOME DO ARQUIVO
+            ================================================= */
+
+            function updateFileDisplay() {
+
+
+                if (
+                    fileInput &&
+                    fileInput.files.length > 0
+                ) {
+
+
+                    const file =
+                        fileInput.files[0];
+
+
+                    fileNameText.textContent =
+                        file.name;
+
+
+                    fileNameDisplay
+                        .classList
+                        .add('active');
+
+
+                } else {
+
+
+                    fileNameText.textContent = '';
+
+
+                    fileNameDisplay
+                        .classList
+                        .remove('active');
+
+                }
+
+            }
+
+
+
+            /* ================================================
+               SELEÇÃO NORMAL
+            ================================================= */
+
+            if (fileInput) {
+
+
+                fileInput.addEventListener(
+                    'change',
+                    function () {
+
+
+                        updateFileDisplay();
+
+
+                    }
+                );
+
+            }
+
+
+
+            /* ================================================
+               REMOVER ARQUIVO
+            ================================================= */
+
+            if (removeFile) {
+
+
+                removeFile.addEventListener(
+                    'click',
+                    function () {
+
+
+                        fileInput.value = '';
+
+
+                        fileNameText.textContent = '';
+
+
+                        fileNameDisplay
+                            .classList
+                            .remove('active');
+
+
+                    }
+                );
+
+            }
+
+
+
+            /* ================================================
+               DRAG OVER
+            ================================================= */
+
+            if (
+                dropArea &&
+                fileInput
+            ) {
+
+
+                dropArea.addEventListener(
+                    'dragover',
+                    function (event) {
+
+
+                        event.preventDefault();
+
+
+                        dropArea
+                            .classList
+                            .add('dragover');
+
+
+                    }
+                );
+
+
+
+                /* ============================================
+                   DRAG LEAVE
+                ============================================= */
+
+                dropArea.addEventListener(
+                    'dragleave',
+                    function () {
+
+
+                        dropArea
+                            .classList
+                            .remove('dragover');
+
+
+                    }
+                );
+
+
+
+                /* ============================================
+                   DROP
+                ============================================= */
+
+                dropArea.addEventListener(
+                    'drop',
+                    function (event) {
+
+
+                        event.preventDefault();
+
+
+                        dropArea
+                            .classList
+                            .remove('dragover');
+
+
+
+                        if (
+                            event.dataTransfer.files.length > 0
+                        ) {
+
+
+                            const dataTransfer =
+                                new DataTransfer();
+
+
+
+                            dataTransfer.items.add(
+                                event.dataTransfer.files[0]
+                            );
+
+
+
+                            fileInput.files =
+                                dataTransfer.files;
+
+
+
+                            updateFileDisplay();
+
+                        }
+
+
+                    }
+                );
+
+            }
+
+
+
+            /* ================================================
+               ENVIO DO FORMULÁRIO
+            ================================================= */
+
+            if (importForm) {
+
+
+                importForm.addEventListener(
+                    'submit',
+                    function () {
+
+
+                        if (
+                            !fileInput ||
+                            fileInput.files.length === 0
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        submitButton.disabled =
+                            true;
+
+
+                        submitButton.textContent =
+                            '⏳ Importando...';
+
+
+                    }
+                );
+
+            }
+
+
+        }
+    );
+
+</script>
+
+
+{% endblock %}

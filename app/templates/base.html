@@ -1,0 +1,1489 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}Painel{% endblock %}
+    </title>
+
+
+    <!-- Fonte -->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ====================================================== */
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            min-height: 100vh;
+
+            background: #dceaf7;
+
+            color: #2c3e50;
+
+            font-family:
+                'Inter',
+                'Segoe UI',
+                Arial,
+                sans-serif;
+
+            -webkit-font-smoothing: antialiased;
+        }
+
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+
+        /* =====================================================
+           SIDEBAR
+        ====================================================== */
+
+        .sidebar {
+            position: fixed;
+
+            top: 0;
+            left: 0;
+            bottom: 0;
+
+            z-index: 100;
+
+            display: flex;
+            flex-direction: column;
+
+            width: 270px;
+
+            color: #ffffff;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #0f2b45 0%,
+                    #163d5c 50%,
+                    #1a4971 100%
+                );
+
+            box-shadow:
+                4px 0 24px rgba(0, 0, 0, 0.15);
+
+            transition:
+                transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+
+
+        /* =====================================================
+           CABEÇALHO SIDEBAR
+        ====================================================== */
+
+        .sidebar-header {
+            position: relative;
+
+            padding: 28px 20px 24px;
+
+            text-align: center;
+
+            background:
+                rgba(0, 0, 0, 0.12);
+
+            border-bottom:
+                1px solid rgba(255, 255, 255, 0.08);
+        }
+
+
+        .sidebar-header h2 {
+            margin-bottom: 3px;
+
+            font-size: 1.15rem;
+            font-weight: 700;
+
+            letter-spacing: 0.4px;
+        }
+
+
+        .sidebar-header small {
+            display: block;
+
+            opacity: 0.65;
+
+            font-size: 0.7rem;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1.2px;
+        }
+
+
+        /* =====================================================
+           MENU
+        ====================================================== */
+
+        .sidebar nav {
+            flex: 1;
+
+            padding: 12px 0;
+
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+
+        .sidebar-section {
+            padding:
+                16px 24px
+                7px;
+
+            opacity: 0.4;
+
+            font-size: 0.64rem;
+            font-weight: 600;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1.5px;
+        }
+
+
+        .sidebar nav a {
+            position: relative;
+
+            display: flex;
+            align-items: center;
+
+            gap: 14px;
+
+            padding: 11px 24px;
+
+            border-left:
+                3px solid transparent;
+
+            color:
+                rgba(255, 255, 255, 0.72);
+
+            font-size: 0.87rem;
+            font-weight: 500;
+
+            text-decoration: none;
+
+            transition:
+                background-color 0.2s ease,
+                color 0.2s ease,
+                border-color 0.2s ease;
+        }
+
+
+        .sidebar nav a:hover {
+            background:
+                rgba(255, 255, 255, 0.07);
+
+            color: #ffffff;
+
+            border-left-color: #4fc3f7;
+        }
+
+
+        .sidebar nav a.active {
+            background:
+                rgba(79, 195, 247, 0.10);
+
+            color: #ffffff;
+
+            border-left-color: #4fc3f7;
+        }
+
+
+        .sidebar nav a .icon {
+            width: 22px;
+            height: 22px;
+
+            object-fit: contain;
+
+            flex-shrink: 0;
+
+            transition:
+                transform 0.2s ease;
+        }
+
+
+        .sidebar nav a:hover .icon {
+            transform: scale(1.12);
+        }
+
+
+        .nav-divider {
+            height: 1px;
+
+            margin: 8px 24px;
+
+            background:
+                rgba(255, 255, 255, 0.06);
+        }
+
+
+        /* =====================================================
+           USUÁRIO SIDEBAR
+        ====================================================== */
+
+        .sidebar-user {
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 16px 20px;
+
+            background:
+                rgba(0, 0, 0, 0.10);
+
+            border-top:
+                1px solid rgba(255, 255, 255, 0.08);
+        }
+
+
+        .user-avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 38px;
+            height: 38px;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #4fc3f7,
+                    #0288d1
+                );
+
+            color: #ffffff;
+
+            font-size: 0.9rem;
+            font-weight: 700;
+
+            box-shadow:
+                0 3px 10px rgba(0, 0, 0, 0.16);
+        }
+
+
+        .user-info {
+            flex: 1;
+
+            min-width: 0;
+        }
+
+
+        .user-info span {
+            display: block;
+
+            overflow: hidden;
+
+            color: #ffffff;
+
+            font-size: 0.8rem;
+            font-weight: 600;
+
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+
+        .user-info small {
+            display: block;
+
+            margin-top: 2px;
+
+            opacity: 0.55;
+
+            font-size: 0.67rem;
+        }
+
+
+        /* =====================================================
+           CONTEÚDO PRINCIPAL
+        ====================================================== */
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+
+            min-height: 100vh;
+
+            margin-left: 270px;
+
+            transition:
+                margin-left 0.35s
+                cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+
+        .main-content.expanded {
+            margin-left: 0;
+        }
+
+
+        /* =====================================================
+           TOPBAR
+        ====================================================== */
+
+        .topbar {
+            position: sticky;
+
+            top: 0;
+
+            z-index: 50;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+
+            width: 100%;
+            height: 64px;
+
+            padding: 0 32px;
+
+            background:
+                rgba(255, 255, 255, 0.97);
+
+            border-bottom:
+                1px solid rgba(15, 43, 69, 0.05);
+
+            box-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.04);
+        }
+
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            min-width: 0;
+        }
+
+
+        .topbar h1 {
+            overflow: hidden;
+
+            margin-left: 4px;
+
+            color: #0f2b45;
+
+            font-size: 1.08rem;
+            font-weight: 650;
+
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+
+        /* =====================================================
+           BOTÕES DA TOPBAR
+        ====================================================== */
+
+        .topbar-icon-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 40px;
+            height: 40px;
+
+            flex-shrink: 0;
+
+            padding: 0;
+
+            border: none;
+            border-radius: 10px;
+
+            background: transparent;
+
+            color: #0f2b45;
+
+            cursor: pointer;
+
+            text-decoration: none;
+
+            transition:
+                background-color 0.2s ease,
+                transform 0.2s ease;
+        }
+
+
+        .topbar-icon-btn:hover {
+            background: #e9f3fb;
+
+            transform: scale(1.03);
+        }
+
+
+        .topbar-icon-btn:focus-visible {
+            outline:
+                3px solid rgba(79, 195, 247, 0.25);
+
+            outline-offset: 2px;
+        }
+
+
+        .topbar-icon {
+            font-size: 1.3rem;
+
+            line-height: 1;
+        }
+
+
+        .topbar-svg-icon {
+            display: block;
+
+            width: 22px;
+            height: 22px;
+        }
+
+
+        /* =====================================================
+           LADO DIREITO TOPBAR
+        ====================================================== */
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            flex-shrink: 0;
+        }
+
+
+        .user-greeting {
+            max-width: 220px;
+
+            overflow: hidden;
+
+            color: #52687b;
+
+            font-size: 0.82rem;
+            font-weight: 500;
+
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+
+        .user-greeting strong {
+            color: #1a4971;
+
+            font-weight: 700;
+        }
+
+
+        .topbar-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            min-height: 36px;
+
+            padding: 7px 14px;
+
+            border-radius: 8px;
+
+            color: #1a4971;
+
+            font-size: 0.81rem;
+            font-weight: 600;
+
+            text-decoration: none;
+
+            transition:
+                background-color 0.2s ease,
+                color 0.2s ease;
+        }
+
+
+        .topbar-link:hover {
+            background: #e9f3fb;
+        }
+
+
+        .btn-login {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            min-height: 38px;
+
+            padding: 8px 18px;
+
+            border-radius: 9px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1a4971,
+                    #0f2b45
+                );
+
+            color: #ffffff !important;
+
+            font-size: 0.81rem;
+            font-weight: 650;
+
+            text-decoration: none;
+
+            box-shadow:
+                0 3px 10px
+                rgba(15, 43, 69, 0.16);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease;
+        }
+
+
+        .btn-login:hover {
+            transform: translateY(-1px);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2196f3,
+                    #1a4971
+                );
+
+            box-shadow:
+                0 5px 15px
+                rgba(15, 43, 69, 0.22);
+        }
+
+
+        /* =====================================================
+           CONTEÚDO DA PÁGINA
+        ====================================================== */
+
+        .page-content {
+            flex: 1;
+
+            width: 100%;
+
+            padding: 32px;
+        }
+
+
+        /* =====================================================
+           OVERLAY MOBILE
+        ====================================================== */
+
+        .overlay {
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 90;
+
+            display: none;
+
+            background:
+                rgba(15, 43, 69, 0.52);
+
+            backdrop-filter: blur(2px);
+        }
+
+
+        .overlay.open {
+            display: block;
+        }
+
+
+        /* =====================================================
+           SCROLL SIDEBAR
+        ====================================================== */
+
+        .sidebar nav::-webkit-scrollbar {
+            width: 4px;
+        }
+
+
+        .sidebar nav::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+
+        .sidebar nav::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+
+            background:
+                rgba(255, 255, 255, 0.15);
+        }
+
+
+        /* =====================================================
+           RESPONSIVIDADE
+        ====================================================== */
+
+        @media (max-width: 900px) {
+
+            .topbar {
+                padding: 0 20px;
+            }
+
+            .page-content {
+                padding: 26px 20px;
+            }
+
+        }
+
+
+        @media (max-width: 768px) {
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+
+            .main-content {
+                margin-left: 0 !important;
+            }
+
+
+            .topbar {
+                padding: 0 14px;
+            }
+
+
+            .page-content {
+                padding: 20px 15px;
+            }
+
+
+            .user-greeting {
+                display: none;
+            }
+
+
+            .topbar-link.register-link {
+                display: none;
+            }
+
+        }
+
+
+        @media (max-width: 480px) {
+
+            .sidebar {
+                width: min(270px, 86vw);
+            }
+
+
+            .topbar {
+                height: 60px;
+            }
+
+
+            .topbar h1 {
+                max-width: 150px;
+
+                font-size: 0.97rem;
+            }
+
+
+            .topbar-icon-btn {
+                width: 36px;
+                height: 36px;
+            }
+
+
+            .btn-login {
+                min-height: 35px;
+
+                padding: 7px 13px;
+
+                font-size: 0.76rem;
+            }
+
+        }
+
+    </style>
+
+
+    {% block extra_css %}{% endblock %}
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside
+        class="sidebar"
+        id="sidebar"
+        aria-label="Menu principal"
+    >
+
+
+        <!-- Cabeçalho -->
+
+        <div class="sidebar-header">
+
+            <h2>
+                Painel
+            </h2>
+
+            <small>
+                Gestão de Perfis
+            </small>
+
+        </div>
+
+
+        <!-- =================================================
+             NAVEGAÇÃO
+        ================================================== -->
+
+        <nav>
+
+
+            <!-- =================================================
+                 PERFIS
+            ================================================== -->
+
+            <div class="sidebar-section">
+                Perfis
+            </div>
+
+
+            <a
+                href="{% url 'new_profile' %}"
+                class="{% if request.resolver_match.url_name == 'new_profile' %}active{% endif %}"
+            >
+
+                <img
+                    src="{% static 'images/botao-adicionar.png' %}"
+                    alt=""
+                    class="icon"
+                >
+
+                <span>
+                    Novo Perfil
+                </span>
+
+            </a>
+
+
+            <a
+                href="{% url 'list_profile' %}"
+                class="{% if request.resolver_match.url_name == 'list_profile' %}active{% endif %}"
+            >
+
+                <img
+                    src="{% static 'images/contatos.png' %}"
+                    alt=""
+                    class="icon"
+                >
+
+                <span>
+                    Listar Perfis
+                </span>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 EVENTOS
+            ================================================== -->
+
+            <div class="sidebar-section">
+                Eventos
+            </div>
+
+
+            <a
+                href="{% url 'new_event' %}"
+                class="{% if request.resolver_match.url_name == 'new_event' %}active{% endif %}"
+            >
+
+                <img
+                    src="{% static 'images/botao-adicionar-vermelho.png' %}"
+                    alt=""
+                    class="icon"
+                >
+
+                <span>
+                    Novo Evento
+                </span>
+
+            </a>
+
+
+            <a
+                href="{% url 'list_event' %}"
+                class="{% if request.resolver_match.url_name == 'list_event' %}active{% endif %}"
+            >
+
+                <img
+                    src="{% static 'images/calendario.png' %}"
+                    alt=""
+                    class="icon"
+                >
+
+                <span>
+                    Listar Eventos
+                </span>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 DISPÊNDIOS
+            ================================================== -->
+
+            <a
+                href="/dispendios/"
+                class="{% if '/dispendios/' in request.path %}active{% endif %}"
+            >
+
+                <img
+                    src="{% static 'images/dispend.png' %}"
+                    alt=""
+                    class="icon"
+                >
+
+                <span>
+                    Dispêndios
+                </span>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 CONTA
+            ================================================== -->
+
+            <div class="sidebar-section">
+                Conta
+            </div>
+
+
+            {% if user.is_authenticated %}
+
+                <div
+                    style="
+                        padding: 10px 24px;
+                        color: rgba(255,255,255,0.75);
+                        font-size: 0.84rem;
+                    "
+                >
+
+                    Olá,
+
+                    <strong style="color:#fff;">
+                        {{ user.first_name }}
+                    </strong>
+
+                </div>
+
+
+                <a href="{% url 'logout' %}">
+
+                    <span
+                        class="icon"
+                        aria-hidden="true"
+                    >
+                        ↪
+                    </span>
+
+                    <span>
+                        Sair
+                    </span>
+
+                </a>
+
+
+            {% else %}
+
+
+                <a
+                    href="{% url 'register' %}"
+                    class="{% if request.resolver_match.url_name == 'register' %}active{% endif %}"
+                >
+
+                    <span
+                        class="icon"
+                        aria-hidden="true"
+                    >
+                        📝
+                    </span>
+
+                    <span>
+                        Registrar
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="{% url 'login' %}"
+                    class="{% if request.resolver_match.url_name == 'login' %}active{% endif %}"
+                >
+
+                    <span
+                        class="icon"
+                        aria-hidden="true"
+                    >
+                        🔐
+                    </span>
+
+                    <span>
+                        Entrar
+                    </span>
+
+                </a>
+
+
+            {% endif %}
+
+        </nav>
+
+
+        <!-- =================================================
+             USUÁRIO CONECTADO
+        ================================================== -->
+
+        {% if user.is_authenticated %}
+
+            <div class="sidebar-user">
+
+
+                <div
+                    class="user-avatar"
+                    title="{{ user.first_name }}"
+                >
+                    {{ user.first_name|first|upper }}
+                </div>
+
+
+                <div class="user-info">
+
+                    <span>
+                        {{ user.first_name }}
+                    </span>
+
+                    <small>
+                        Conectado
+                    </small>
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+
+    </aside>
+
+
+    <!-- =====================================================
+         OVERLAY MOBILE
+    ====================================================== -->
+
+    <div
+        class="overlay"
+        id="overlay"
+        aria-hidden="true"
+    ></div>
+
+
+    <!-- =====================================================
+         CONTEÚDO PRINCIPAL
+    ====================================================== -->
+
+    <div
+        class="main-content"
+        id="mainContent"
+    >
+
+
+        <!-- =================================================
+             TOPBAR
+        ================================================== -->
+
+        <header class="topbar">
+
+
+            <!-- LADO ESQUERDO -->
+
+            <div class="topbar-left">
+
+
+                <!-- MENU -->
+
+                <button
+                    type="button"
+                    class="topbar-icon-btn"
+                    id="sidebarToggle"
+                    title="Abrir ou fechar menu"
+                    aria-label="Abrir ou fechar menu"
+                    aria-controls="sidebar"
+                    aria-expanded="true"
+                >
+
+                    <span
+                        class="topbar-icon"
+                        aria-hidden="true"
+                    >
+                        ☰
+                    </span>
+
+                </button>
+
+
+                <!-- HOME -->
+
+                <a
+                    href="{% url 'home' %}"
+                    class="topbar-icon-btn"
+                    title="Página inicial"
+                    aria-label="Página inicial"
+                >
+
+                    <svg
+                        class="topbar-svg-icon"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden="true"
+                    >
+
+                        <path
+                            d="M3 10.5L12 3l9 7.5"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M5.5 9.5V20h13V9.5"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M10 20v-5h4v5"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                </a>
+
+
+                <!-- TÍTULO -->
+
+                <h1>
+
+                    {% block page_title %}
+                        Painel
+                    {% endblock %}
+
+                </h1>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 LADO DIREITO
+            ================================================== -->
+
+            <div class="topbar-right">
+
+
+                {% if user.is_authenticated %}
+
+
+                    <span class="user-greeting">
+
+                        Olá,
+
+                        <strong>
+                            {{ user.first_name }}
+                        </strong>
+
+                    </span>
+
+
+                    <a
+                        href="{% url 'logout' %}"
+                        class="btn-login"
+                    >
+                        Sair
+                    </a>
+
+
+                {% else %}
+
+
+                    <a
+                        href="{% url 'register' %}"
+                        class="topbar-link register-link"
+                    >
+                        Registrar
+                    </a>
+
+
+                    <a
+                        href="{% url 'login' %}"
+                        class="btn-login"
+                    >
+                        Entrar
+                    </a>
+
+
+                {% endif %}
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             CONTEÚDO DAS PÁGINAS
+        ================================================== -->
+
+        <main class="page-content">
+
+            {% block content %}
+            {% endblock %}
+
+        </main>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            function () {
+
+                const sidebar =
+                    document.getElementById('sidebar');
+
+                const mainContent =
+                    document.getElementById('mainContent');
+
+                const overlay =
+                    document.getElementById('overlay');
+
+                const sidebarToggle =
+                    document.getElementById('sidebarToggle');
+
+
+                /*
+                 * Verifica se está em tela mobile
+                 */
+
+                function isMobile() {
+
+                    return window.innerWidth <= 768;
+
+                }
+
+
+                /*
+                 * Atualiza aria-expanded
+                 */
+
+                function updateToggleState() {
+
+                    let isOpen;
+
+
+                    if (isMobile()) {
+
+                        isOpen =
+                            sidebar.classList.contains(
+                                'mobile-open'
+                            );
+
+                    } else {
+
+                        isOpen =
+                            !sidebar.classList.contains(
+                                'collapsed'
+                            );
+
+                    }
+
+
+                    sidebarToggle.setAttribute(
+                        'aria-expanded',
+                        isOpen ? 'true' : 'false'
+                    );
+
+                }
+
+
+                /*
+                 * Abrir / fechar sidebar
+                 */
+
+                function toggleSidebar() {
+
+                    if (isMobile()) {
+
+                        sidebar.classList.toggle(
+                            'mobile-open'
+                        );
+
+
+                        overlay.classList.toggle(
+                            'open'
+                        );
+
+
+                        document.body.style.overflow =
+                            sidebar.classList.contains(
+                                'mobile-open'
+                            )
+                                ? 'hidden'
+                                : '';
+
+                    } else {
+
+                        sidebar.classList.toggle(
+                            'collapsed'
+                        );
+
+
+                        mainContent.classList.toggle(
+                            'expanded'
+                        );
+
+                    }
+
+
+                    updateToggleState();
+
+                }
+
+
+                /*
+                 * Fechar menu mobile
+                 */
+
+                function closeMobileSidebar() {
+
+                    sidebar.classList.remove(
+                        'mobile-open'
+                    );
+
+
+                    overlay.classList.remove(
+                        'open'
+                    );
+
+
+                    document.body.style.overflow = '';
+
+
+                    updateToggleState();
+
+                }
+
+
+                /*
+                 * Clique no botão
+                 */
+
+                sidebarToggle.addEventListener(
+                    'click',
+                    toggleSidebar
+                );
+
+
+                /*
+                 * Clique fora da sidebar
+                 */
+
+                overlay.addEventListener(
+                    'click',
+                    closeMobileSidebar
+                );
+
+
+                /*
+                 * ESC fecha no celular
+                 */
+
+                document.addEventListener(
+                    'keydown',
+                    function (event) {
+
+                        if (
+                            event.key === 'Escape' &&
+                            isMobile()
+                        ) {
+
+                            closeMobileSidebar();
+
+                        }
+
+                    }
+                );
+
+
+                /*
+                 * Fecha o menu ao clicar
+                 * em uma opção no mobile
+                 */
+
+                const sidebarLinks =
+                    sidebar.querySelectorAll(
+                        'nav a'
+                    );
+
+
+                sidebarLinks.forEach(
+                    function (link) {
+
+                        link.addEventListener(
+                            'click',
+                            function () {
+
+                                if (isMobile()) {
+
+                                    closeMobileSidebar();
+
+                                }
+
+                            }
+                        );
+
+                    }
+                );
+
+
+                /*
+                 * Ajuste quando redimensionar
+                 */
+
+                window.addEventListener(
+                    'resize',
+                    function () {
+
+                        if (!isMobile()) {
+
+                            sidebar.classList.remove(
+                                'mobile-open'
+                            );
+
+
+                            overlay.classList.remove(
+                                'open'
+                            );
+
+
+                            document.body.style.overflow = '';
+
+                        }
+
+
+                        updateToggleState();
+
+                    }
+                );
+
+
+                updateToggleState();
+
+            }
+        );
+
+    </script>
+
+
+    {% block extra_js %}
+    {% endblock %}
+
+
+</body>
+
+</html>

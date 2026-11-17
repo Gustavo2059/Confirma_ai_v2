@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*/migrations/__pycache__/
+# Django
+db.sqlite3
+
+# VS Code opcional
+.vscode/
+
+# Ambiente virtual opcional
+venv/
+.venv/
+
+# Segredos locais
+.env
+.env.local
+
+#media
+.media/
+
+brag-output/

@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}Presenças do Evento{% endblock %}
+{% block page_title %}Presenças do Evento{% endblock %}
+
+{% block content %}
+<div style="max-width: 1000px; margin: 0 auto; padding: 24px;">
+    <div style="
+        background: #ffffff;
+        border-radius: 24px;
+        padding: 32px;
+        box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+        border: 1px solid #f1f1f1;
+    ">
+        
+        <div style="margin-bottom: 24px;">
+            <h2 style="
+                margin: 0 0 10px 0;
+                font-size: 28px;
+                font-weight: 700;
+                color: #2c2c2c;
+            ">
+                {{ evento.name }}
+            </h2>
+
+            <div style="
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                margin-top: 12px;
+            ">
+                <div style="
+                    background: #f8f9fc;
+                    padding: 10px 16px;
+                    border-radius: 14px;
+                    font-size: 15px;
+                    color: #555;
+                    border: 1px solid #eceef5;
+                ">
+                    <strong style="color: #333;">Data:</strong> {{ evento.date|date:"d/m/Y" }}
+                </div>
+
+                <div style="
+                    background: #eefaf1;
+                    padding: 10px 16px;
+                    border-radius: 14px;
+                    font-size: 15px;
+                    color: #2f6b3e;
+                    border: 1px solid #d8efde;
+                ">
+                    <strong>Total de presenças:</strong> {{ presencas|length }}
+                </div>
+            </div>
+        </div>
+
+        <div style="height: 1px; background: #eeeeee; margin: 24px 0;"></div>
+
+        {% if presencas %}
+            <div style="
+                overflow-x: auto;
+                border-radius: 18px;
+                border: 1px solid #d9e0e7;
+                background: #fff;
+            ">
+                <table style="
+                    width: 100%;
+                    border-collapse: collapse;
+                    min-width: 600px;
+                    background: #fff;
+                ">
+                    <thead>
+                        <tr style="background: #12385b;">
+                            <th style="
+                                text-align: left;
+                                padding: 18px;
+                                font-size: 14px;
+                                font-weight: 700;
+                                color: #ffffff;
+                                text-transform: uppercase;
+                                letter-spacing: 0.8px;
+                            ">
+                                Participante(s)
+                            </th>
+                            <th style="
+                                text-align: left;
+                                padding: 18px;
+                                font-size: 14px;
+                                font-weight: 700;
+                                color: #ffffff;
+                                text-transform: uppercase;
+                                letter-spacing: 0.8px;
+                            ">
+                                Horário
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for presenca in presencas %}
+                        <tr style="background: #ffffff;">
+                            <td style="
+                                padding: 18px;
+                                border-top: 1px solid #edf1f5;
+                                color: #2f3a45;
+                                font-size: 15px;
+                            ">
+                                {{ presenca.profile }}
+                            </td>
+                            <td style="
+                                padding: 18px;
+                                border-top: 1px solid #edf1f5;
+                                color: #566473;
+                                font-size: 15px;
+                            ">
+                                {{ presenca.data_hora|date:"d/m/Y H:i" }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div style="
+                text-align: center;
+                padding: 48px 24px;
+                background: #fafbfc;
+                border: 1px dashed #d9dce3;
+                border-radius: 18px;
+                color: #666;
+            ">
+                <div style="font-size: 42px; margin-bottom: 12px;">📋</div>
+                <h3 style="
+                    margin: 0 0 8px 0;
+                    font-size: 20px;
+                    color: #333;
+                ">
+                    Nenhuma presença registrada
+                </h3>
+                <p style="
+                    margin: 0;
+                    font-size: 15px;
+                    color: #777;
+                ">
+                    Ainda não há participantes confirmados para este evento.
+                </p>
+            </div>
+        {% endif %}
+
+        <div style="
+            margin-top: 28px;
+            display: flex;
+            justify-content: center;
+        ">
+            <a href="{% url 'detail_event' evento.pk %}" style="
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 12px 22px;
+                background: #eef3f8;
+                color: #12385b;
+                text-decoration: none;
+                border-radius: 14px;
+                font-weight: 600;
+                font-size: 15px;
+                border: 1px solid #d6e0ea;
+                transition: 0.2s ease;
+            ">
+                ← Voltar
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

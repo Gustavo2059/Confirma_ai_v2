@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Evento{% endblock %}
+
+{% block page_title %}Editar Evento{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 64px);
+        padding: 20px;
+    }
+
+    .form-card {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 8px 40px rgba(15, 43, 69, 0.12);
+        width: 100%;
+        max-width: 520px;
+        overflow: hidden;
+    }
+
+    .form-header {
+        background: linear-gradient(135deg, #0f2b45, #1a4971);
+        color: #fff;
+        padding: 32px 40px 24px;
+        text-align: center;
+    }
+
+    .form-header .icon { 
+        font-size: 2.5rem; 
+        margin-bottom: 8px; 
+    }
+
+    .form-header h2 { 
+        font-size: 1.3rem;
+        font-weight: 700; 
+        margin-bottom: 4px; 
+    }
+
+    .form-header p { 
+        font-size: 0.82rem; 
+        opacity: 0.7; 
+    }
+
+    .form-body { 
+        padding: 32px 40px 40px; 
+    }
+
+    .form-group {
+        margin-bottom: 18px;;
+    }
+
+    .form-body label {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 6px;
+    }
+
+    .form-body input[type="text"],
+    .form-body input[type="date"],
+    .form-body input[type="time"],
+    .form-body input[type="datetime-local"],
+    .form-body input[type="number"],
+    .form-body input[type="email"],
+    .form-body input[type="url"],
+    .form-body textarea,
+
+    .form-body select {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #d0dce8;
+        border-radius: 10px;
+        font-size: 0.92rem;
+        font-family: 'Inter', sans-serif;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        background: #f8fbfe;
+        color: #2c3e50;
+    }
+
+    .form-body input:focus,
+    .form-body textarea:focus,
+    .form-body select:focus {
+        border-color: #4fc3f7;
+        box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.15);
+        background: #fff;
+    }
+
+    .form-body textarea { 
+        min-height: 100px; 
+        resize: vertical; 
+    }
+
+    .time-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 8px;
+    }
+
+    .btn-submit {
+        flex: 1;
+        padding: 14px;
+        background: linear-gradient(135deg, #1a4971, #0f2b45);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        font-family: 'Inter', sans-serif;
+        cursor: pointer;
+        transition: all 0.25s;
+        box-shadow: 0 4px 16px rgba(15, 43, 69, 0.25);
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 24px rgba(15, 43, 69, 0.35);
+        background: linear-gradient(135deg, #2196F3, #1a4971);
+    }
+
+    .btn-back {
+        padding: 14px 20px;
+        background: #f0f4f8;
+        color: #1a4971;
+        border: 2px solid #d0dce8;
+        border-radius: 12px;
+        font-size: 0.92rem;
+        font-weight: 600;
+        font-family: 'Inter', sans-serif;
+        text-decoration: none;
+        text-align: center;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+    .btn-back:hover { 
+        background: #dceaf7; 
+        border-color: #4fc3f7; 
+    }
+
+    .form-body .errorlist { 
+        list-style: none; 
+        padding: 0; 
+        margin: 4px 0 0; 
+    }
+
+    .form-body .errorlist li {
+        background: #fef2f2;
+        color: #dc2626;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 0.78rem;
+        border-left: 3px solid #dc2626;
+        margin-top: 6px;
+    }
+
+    @media (max-width: 480px) {
+        .form-body { padding: 24px 20px 28px; }
+        .form-header { padding: 24px 20px 20px; }
+        .form-actions { flex-direction: column; }
+        .time-row { grid-template-columns: 1fr;}
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-wrapper">
+    <div class="form-card">
+        <div class="form-header">
+            <div class="icon">✏️</div>
+            <h2>Editar evento</h2>
+            <p>Atualize os dados do evento abaixo</p>
+        </div>
+        <div class="form-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="{{ form.name.id_for_label }}">Nome do evento</label>
+                    {{ form.name }}
+                    {{ form.name.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.date.id_for_label }}">Data</label>
+                    {{ form.date }}
+                    {{ form.date.errors }}
+                </div>
+
+                <div class="time-row">
+                    <div class="form-group">
+                        <label for="{{ form.start_time.id_for_label }}">Horário inicial</label>
+                        {{ form.start_time }}
+                        {{ form.start_time.errors }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.end_time.id_for_label }}">Horário final</label>
+                        {{ form.end_time }}
+                        {{ form.end_time.errors }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.location.id_for_label }}">Local</label>
+                    {{ form.location }}
+                    {{ form.location.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.description.id_for_label }}">Descrição</label>
+                    {{ form.description }}
+                    {{ form.description.errors }}
+                </div>
+
+                <div class="form-actions">
+                    <a href="{% url 'detail_event' object.pk %}" class="btn-back">← Voltar</a>
+                    <button type="submit" class="btn-submit">💾 Salvar alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

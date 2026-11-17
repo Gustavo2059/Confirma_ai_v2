@@ -1,0 +1,234 @@
+Novo Módulo: Dispêndios Inteligentes (com IA)
+Objetivo
+
+[Mandar o QRCODE NO EMAIL TAMBÉM QUANDO UM EMAIL DE NOVO EVENTO.]
+[forms de imagem para adicionar no dispêndio]
+[ao selecionar um evento em dispêndio ele tem que carregar seus dispêndios atuais podendo atualizar]
+
+Criar um módulo para controle financeiro dos eventos, permitindo o cadastro manual de gastos e a utilização de Inteligência Artificial para leitura automática de notas fiscais, recibos e comprovantes.
+
+A IA será responsável por extrair as informações do documento e sugerir o lançamento do dispêndio vinculado ao evento.
+
+Fluxo principal
+1. Seleção do evento
+
+O usuário acessa o módulo Dispêndios.
+
+O sistema apresenta os eventos cadastrados:
+
+Exemplo:
+
+Eventos:
+
+Esses eventos já estão cadastrados em Model: Event
+[ Formatura 2026 ]
+[ Congresso Empresarial ]
+[ Festa de Encerramento ]
+
+O usuário seleciona um evento.
+
+2. Cadastro dos dispêndios
+
+Após selecionar o evento, o usuário poderá:
+
+Opção A — Cadastro manual
+
+Adicionar um gasto preenchendo:
+
+Descrição:
+Fornecedor:
+Categoria:
+Data:
+Valor:
+Observações:
+
+Exemplo:
+
+Descrição:
+Serviço de Buffet
+
+
+Fornecedor:
+Restaurante ABC
+
+
+Valor:
+R$ 8.500,00
+
+
+Categoria:
+Alimentação
+Opção B — Leitura automática por IA
+
+O usuário poderá enviar:
+
+Foto da nota fiscal;
+PDF da nota;
+Imagem de recibo;
+Comprovante de pagamento.
+
+A IA fará a leitura do documento.
+
+Funcionamento da IA
+Entrada
+
+Documento:
+
+nota_fiscal.jpg
+
+↓
+
+Processamento OCR + IA
+
+A IA identifica:
+
+Razão social do fornecedor;
+CNPJ;
+Data da emissão;
+Número da nota;
+Valor total;
+Produtos/serviços;
+Categoria provável do gasto.
+Retorno sugerido
+
+Exemplo:
+
+Documento analisado com sucesso.
+
+
+Sugestão de lançamento:
+
+
+Evento:
+Formatura 2026
+
+
+Fornecedor:
+Buffet XYZ LTDA
+
+
+CNPJ:
+12.345.678/0001-90
+
+
+Descrição:
+Serviço de alimentação para evento
+
+
+Categoria:
+Alimentação
+
+
+Valor:
+R$ 8.500,00
+
+
+Data:
+21/08/2026
+Confirmação humana
+
+A IA não grava automaticamente.
+
+O usuário recebe:
+
+Deseja cadastrar este dispêndio?
+
+
+[ Confirmar ]
+
+
+[ Editar informações ]
+
+
+[ Cancelar ]
+
+Após confirmação:
+
+Evento
+ |
+ └── Dispêndios
+        |
+        ├── Buffet
+        ├── Decoração
+        ├── Transporte
+        └── Som
+Banco de dados (futura implementação)
+
+Estrutura:
+
+Evento
+ |
+ |
+ └── Dispêndio
+        |
+        ├── descrição
+        ├── categoria
+        ├── fornecedor
+        ├── CNPJ
+        ├── valor
+        ├── data
+        ├── documento_original
+        ├── dados_extraídos_IA
+        └── confiança_IA
+Recursos futuros da IA
+Classificação automática
+
+A IA identifica:
+
+"Compra de refrigerantes"
+        ↓
+Categoria:
+Alimentação
+Alertas
+
+Exemplo:
+
+Atenção:
+
+
+Este evento já possui:
+
+
+Buffet:
+R$ 10.000
+
+
+Novo lançamento:
+R$ 9.500
+
+
+O valor está acima da média dos eventos anteriores.
+Relatórios inteligentes
+
+A IA poderá gerar:
+
+Resumo financeiro:
+
+
+Evento:
+Formatura 2026
+
+
+Total gasto:
+R$ 45.320,00
+
+
+Maior categoria:
+Alimentação (42%)
+
+
+Menor categoria:
+Transporte (5%)
+
+
+Previsão final:
+R$ 51.000,00
+Visão do módulo
+
+Eu mudaria o nome de "Dispêndios" para algo mais comercial:
+
+Financeiro → Dispêndios Inteligentes
+
+ou
+
+Gestão Financeira → Gastos e Documentos

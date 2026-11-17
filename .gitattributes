@@ -1,0 +1,2 @@
+# Não contar templates HTML nas estatísticas de linguagem do GitHub
+*.html linguist-detectable=false

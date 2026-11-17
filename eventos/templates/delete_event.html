@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Excluir Evento{% endblock %}
+{% block page_title %}Excluir Evento{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 0 auto; padding: 20px;">
+    <div style="
+        background: #fff;
+        border-radius: 20px;
+        padding: 32px 28px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        text-align: center;
+    ">
+        <div style="
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: #fdecec;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        ">
+            🗑️
+        </div>
+
+        <h2 style="margin-bottom: 12px; color: #1e3a8a;">
+            Excluir evento
+        </h2>
+
+        <p style="font-size: 16px; color: #444; margin-bottom: 8px;">
+            Tem certeza que deseja excluir o evento
+            <strong style="color: #111;">{{ object.name }}</strong>?
+        </p>
+
+        <p style="font-size: 14px; color: #888; margin-bottom: 28px;">
+            Essa ação não poderá ser desfeita.
+        </p>
+
+        <form method="post" style="margin-bottom: 16px;">
+            {% csrf_token %}
+            <div style="
+                display: flex;
+                justify-content: center;
+                gap: 12px;
+                flex-wrap: wrap;
+            ">
+                <a href="{% url 'detail_event' object.pk %}" style="
+                    text-decoration: none;
+                    padding: 12px 22px;
+                    border-radius: 12px;
+                    background: #e5e7eb;
+                    color: #374151;
+                    font-weight: 600;
+                    transition: 0.2s;
+                ">
+                    Cancelar
+                </a>
+
+                <button type="submit" style="
+                    border: none;
+                    padding: 12px 22px;
+                    border-radius: 12px;
+                    background: #dc2626;
+                    color: white;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: 0.2s;
+                    box-shadow: 0 4px 14px rgba(220, 38, 38, 0.25);
+                ">
+                    Sim, excluir
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

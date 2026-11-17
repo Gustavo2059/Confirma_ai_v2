@@ -1,0 +1,1237 @@
+{% load static %}
+
+{% block extra_css %}
+<style>
+    /* =========================
+       ESTRUTURA PRINCIPAL
+    ========================== */
+
+    .login-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 64px);
+        padding: 20px;
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 420px;
+        padding: 48px 40px 40px;
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 8px 40px rgba(15, 43, 69, 0.12);
+        box-sizing: border-box;
+    }
+
+
+    /* =========================
+       CABEÇALHO
+    ========================== */
+
+    .login-header {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+
+    .login-header h2 {
+        margin: 0 0 6px;
+        color: #0f2b45;
+        font-size: 1.4rem;
+        font-weight: 700;
+    }
+
+    .login-subtitle {
+        margin: 0;
+        color: #7f8c97;
+        font-size: 0.85rem;
+        line-height: 1.5;
+    }
+
+
+    /* =========================
+       FORMULÁRIO
+    ========================== */
+
+    .login-form {
+        width: 100%;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 7px;
+        color: #2c3e50;
+        font-size: 0.82rem;
+        font-weight: 600;
+    }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        height: 48px;
+        padding: 0 16px;
+
+        border: 2px solid #d0dce8;
+        border-radius: 10px;
+
+        background: #f8fbfe;
+        color: #2c3e50;
+
+        font-family: 'Inter', Arial, Helvetica, sans-serif;
+        font-size: 0.92rem;
+
+        outline: none;
+        box-sizing: border-box;
+
+        transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease,
+            background-color 0.2s ease;
+    }
+
+    .form-control::placeholder {
+        color: #9aa9b8;
+    }
+
+    .form-control:hover {
+        border-color: #b7c9da;
+    }
+
+    .form-control:focus {
+        border-color: #4fc3f7;
+        background: #ffffff;
+        box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.15);
+    }
+
+
+    /* =========================
+       SENHA
+    ========================== */
+
+    .password-wrapper {
+        position: relative;
+    }
+
+    .password-wrapper .form-control {
+        padding-right: 48px;
+    }
+
+    .password-toggle {
+        position: absolute;
+        top: 50%;
+        right: 14px;
+
+        transform: translateY(-50%);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 30px;
+        height: 30px;
+
+        padding: 0;
+
+        background: transparent;
+        border: none;
+
+        color: #7f8c97;
+
+        cursor: pointer;
+        font-size: 18px;
+    }
+
+    .password-toggle:hover {
+        color: #1a4971;
+    }
+
+
+    /* =========================
+       BOTÃO LOGIN
+    ========================== */
+
+    .login-button {
+        width: 100%;
+        min-height: 48px;
+
+        margin-top: 8px;
+        padding: 14px 20px;
+
+        border: none;
+        border-radius: 12px;
+
+        background: linear-gradient(
+            135deg,
+            #1a4971,
+            #0f2b45
+        );
+
+        color: #ffffff;
+
+        font-family: 'Inter', Arial, Helvetica, sans-serif;
+        font-size: 0.95rem;
+        font-weight: 700;
+
+        letter-spacing: 0.3px;
+
+        cursor: pointer;
+
+        box-shadow: 0 4px 16px rgba(15, 43, 69, 0.25);
+
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease,
+            background 0.2s ease;
+    }
+
+    .login-button:hover {
+        transform: translateY(-2px);
+
+        background: linear-gradient(
+            135deg,
+            #2196f3,
+            #1a4971
+        );
+
+        box-shadow: 0 6px 24px rgba(15, 43, 69, 0.35);
+    }
+
+    .login-button:active {
+        transform: translateY(0);
+    }
+
+
+    /* =========================
+       ERROS
+    ========================== */
+
+    .login-messages {
+        margin-bottom: 20px;
+    }
+
+    .errorlist {
+        list-style: none;
+        margin: 0 0 14px;
+        padding: 0;
+    }
+
+    .errorlist li {
+        margin-bottom: 6px;
+        padding: 11px 14px;
+
+        border-left: 3px solid #dc2626;
+        border-radius: 8px;
+
+        background: #fef2f2;
+        color: #dc2626;
+
+        font-size: 0.82rem;
+        line-height: 1.45;
+    }
+
+    .field-error {
+        margin-top: 6px;
+        color: #dc2626;
+        font-size: 0.78rem;
+        line-height: 1.4;
+    }
+
+
+    /* =========================
+       LINKS
+    ========================== */
+
+    .login-footer-wrapper {
+        margin-top: 24px;
+    }
+
+    .login-footer {
+        margin-top: 10px;
+        text-align: center;
+        color: #7f8c97;
+        font-size: 0.82rem;
+        line-height: 1.5;
+    }
+
+    .login-footer:first-child {
+        margin-top: 0;
+    }
+
+    .login-footer a {
+        color: #1a4971;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .login-footer a:hover {
+        text-decoration: underline;
+    }
+
+
+    /* =====================================================
+       MODAL MFA
+    ====================================================== */
+
+    .mfa-overlay {
+        position: fixed;
+        inset: 0;
+
+        display: none;
+        align-items: center;
+        justify-content: center;
+
+        padding: 20px;
+
+        background: rgba(15, 43, 69, 0.60);
+        backdrop-filter: blur(5px);
+
+        z-index: 9999;
+
+        box-sizing: border-box;
+    }
+
+    .mfa-overlay.active {
+        display: flex;
+        animation: mfaFadeIn 0.2s ease;
+    }
+
+    @keyframes mfaFadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+
+    /* =========================
+       CARD MFA
+    ========================== */
+
+    .mfa-modal {
+        width: 100%;
+        max-width: 420px;
+
+        padding: 38px 36px 34px;
+
+        background: #ffffff;
+
+        border-radius: 20px;
+
+        box-shadow: 0 20px 60px rgba(15, 43, 69, 0.30);
+
+        box-sizing: border-box;
+
+        animation: mfaModalIn 0.25s ease;
+    }
+
+    @keyframes mfaModalIn {
+        from {
+            opacity: 0;
+            transform: translateY(15px) scale(0.97);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+
+    /* =========================
+       ÍCONE MFA
+    ========================== */
+
+    .mfa-icon-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 64px;
+        height: 64px;
+
+        margin: 0 auto 20px;
+
+        border-radius: 50%;
+
+        background: linear-gradient(
+            135deg,
+            rgba(79, 195, 247, 0.15),
+            rgba(26, 73, 113, 0.12)
+        );
+    }
+
+    .mfa-icon {
+        width: 30px;
+        height: 30px;
+        color: #1a4971;
+    }
+
+
+    /* =========================
+       CABEÇALHO MFA
+    ========================== */
+
+    .mfa-header {
+        text-align: center;
+        margin-bottom: 26px;
+    }
+
+    .mfa-header h2 {
+        margin: 0 0 10px;
+        color: #0f2b45;
+        font-size: 1.35rem;
+        font-weight: 700;
+    }
+
+    .mfa-description {
+        margin: 0;
+        color: #7f8c97;
+        font-size: 0.85rem;
+        line-height: 1.6;
+    }
+
+
+    /* =========================
+       CÓDIGO MFA
+    ========================== */
+
+    .mfa-code-wrapper {
+        margin-bottom: 20px;
+    }
+
+    .mfa-code-input {
+        display: block;
+
+        width: 100%;
+        height: 64px;
+
+        padding: 0 18px;
+
+        border: 2px solid #d0dce8;
+        border-radius: 12px;
+
+        background: #f8fbfe;
+        color: #0f2b45;
+
+        font-family: 'Inter', Arial, Helvetica, sans-serif;
+
+        font-size: 1.65rem;
+        font-weight: 700;
+
+        letter-spacing: 12px;
+
+        text-align: center;
+
+        outline: none;
+
+        box-sizing: border-box;
+
+        transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease,
+            background-color 0.2s ease;
+    }
+
+    .mfa-code-input::placeholder {
+        color: #c5d0da;
+    }
+
+    .mfa-code-input:focus {
+        border-color: #4fc3f7;
+        background: #ffffff;
+        box-shadow: 0 0 0 4px rgba(79, 195, 247, 0.15);
+    }
+
+
+    /* =========================
+       ERRO MFA
+    ========================== */
+
+    .mfa-error {
+        margin-bottom: 18px;
+        padding: 11px 14px;
+
+        border-left: 3px solid #dc2626;
+        border-radius: 8px;
+
+        background: #fef2f2;
+        color: #dc2626;
+
+        font-size: 0.82rem;
+        line-height: 1.45;
+    }
+
+
+    /* =========================
+       BOTÃO MFA
+    ========================== */
+
+    .mfa-confirm-button {
+        width: 100%;
+        min-height: 48px;
+
+        padding: 14px 20px;
+
+        border: none;
+        border-radius: 12px;
+
+        background: linear-gradient(
+            135deg,
+            #1a4971,
+            #0f2b45
+        );
+
+        color: #ffffff;
+
+        font-family: 'Inter', Arial, Helvetica, sans-serif;
+
+        font-size: 0.95rem;
+        font-weight: 700;
+
+        cursor: pointer;
+
+        box-shadow: 0 4px 16px rgba(15, 43, 69, 0.25);
+
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease,
+            background 0.2s ease;
+    }
+
+    .mfa-confirm-button:hover {
+        transform: translateY(-2px);
+
+        background: linear-gradient(
+            135deg,
+            #2196f3,
+            #1a4971
+        );
+
+        box-shadow: 0 6px 24px rgba(15, 43, 69, 0.35);
+    }
+
+
+    /* =========================
+       RODAPÉ MFA
+    ========================== */
+
+    .mfa-footer {
+        margin-top: 18px;
+        text-align: center;
+    }
+
+    .mfa-back-button {
+        padding: 6px 8px;
+
+        border: none;
+        background: transparent;
+
+        color: #7f8c97;
+
+        font-family: 'Inter', Arial, Helvetica, sans-serif;
+
+        font-size: 0.8rem;
+        font-weight: 500;
+
+        cursor: pointer;
+    }
+
+    .mfa-back-button:hover {
+        color: #1a4971;
+        text-decoration: underline;
+    }
+
+    .mfa-expiration {
+        margin: 16px 0 0;
+
+        color: #9aa9b8;
+
+        text-align: center;
+
+        font-size: 0.75rem;
+        line-height: 1.4;
+    }
+
+
+    /* =========================
+       MODAL ABERTO
+    ========================== */
+
+    body.mfa-open {
+        overflow: hidden;
+    }
+
+
+    /* =========================
+       RESPONSIVIDADE
+    ========================== */
+
+    @media (max-width: 480px) {
+
+        .login-wrapper {
+            min-height: calc(100vh - 56px);
+            padding: 14px;
+        }
+
+        .login-card {
+            padding: 34px 24px 30px;
+            border-radius: 16px;
+        }
+
+        .login-header {
+            margin-bottom: 26px;
+        }
+
+        .login-header h2 {
+            font-size: 1.3rem;
+        }
+
+        .form-control {
+            font-size: 16px;
+        }
+
+        .mfa-overlay {
+            padding: 14px;
+        }
+
+        .mfa-modal {
+            padding: 32px 24px 28px;
+            border-radius: 16px;
+        }
+
+        .mfa-header h2 {
+            font-size: 1.25rem;
+        }
+
+        .mfa-code-input {
+            height: 60px;
+            font-size: 1.45rem;
+            letter-spacing: 9px;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="login-wrapper">
+
+    <div class="login-card">
+
+        <!-- CABEÇALHO -->
+        <div class="login-header">
+
+            <h2>Bem-vindo!</h2>
+
+            <p class="login-subtitle">
+                Entre com seu e-mail e senha para acessar o painel
+            </p>
+
+        </div>
+
+
+        <!-- FORMULÁRIO LOGIN -->
+        <form
+            method="post"
+            class="login-form"
+            autocomplete="on"
+        >
+
+            {% csrf_token %}
+
+            <input
+                type="hidden"
+                name="action"
+                value="login"
+            >
+
+
+            <!-- MENSAGENS -->
+            {% if messages %}
+
+                <div class="login-messages">
+
+                    {% for message in messages %}
+
+                        <ul class="errorlist">
+                            <li>{{ message }}</li>
+                        </ul>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- ERROS GERAIS -->
+            {% if login_form.non_field_errors %}
+
+                <ul class="errorlist">
+
+                    {% for error in login_form.non_field_errors %}
+
+                        <li>{{ error }}</li>
+
+                    {% endfor %}
+
+                </ul>
+
+            {% endif %}
+
+
+            <!-- E-MAIL -->
+            <div class="form-group">
+
+                <label
+                    for="id_username"
+                    class="form-label"
+                >
+                    E-mail
+                </label>
+
+                <input
+                    type="email"
+                    name="username"
+                    id="id_username"
+                    class="form-control"
+
+                    value="{{ request.POST.username|default:'' }}"
+
+                    placeholder="Digite seu e-mail"
+
+                    autocomplete="email"
+                    inputmode="email"
+
+                    maxlength="254"
+
+                    required
+                    autofocus
+                >
+
+                {% if login_form.username.errors %}
+
+                    <div class="field-error">
+
+                        {% for error in login_form.username.errors %}
+
+                            <div>{{ error }}</div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- SENHA -->
+            <div class="form-group">
+
+                <label
+                    for="id_password"
+                    class="form-label"
+                >
+                    Senha
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        name="password"
+                        id="id_password"
+                        class="form-control"
+
+                        placeholder="Digite sua senha"
+
+                        autocomplete="current-password"
+
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        id="passwordToggle"
+                        aria-label="Mostrar senha"
+                        title="Mostrar senha"
+                    >
+                        &#128065;
+                    </button>
+
+                </div>
+
+
+                {% if login_form.password.errors %}
+
+                    <div class="field-error">
+
+                        {% for error in login_form.password.errors %}
+
+                            <div>{{ error }}</div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- BOTÃO -->
+            <button
+                type="submit"
+                class="login-button"
+            >
+                Entrar
+            </button>
+
+        </form>
+
+
+        <!-- LINKS -->
+        <div class="login-footer-wrapper">
+
+            <div class="login-footer">
+
+                Esqueceu sua senha?
+
+                <a href="{% url 'password_reset' %}">
+                    Recuperar senha
+                </a>
+
+            </div>
+
+
+            <div class="login-footer">
+
+                Ainda não tem uma conta?
+
+                <a href="{% url 'register' %}">
+                    Criar conta
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL MFA
+
+     O Django informa se o modal deve ser aberto através
+     de data-show-mfa, evitando template tags dentro do JS.
+====================================================== -->
+
+<div
+    class="mfa-overlay"
+    id="mfaOverlay"
+    data-show-mfa="{{ show_mfa|yesno:'true,false' }}"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="mfaTitle"
+    aria-hidden="true"
+>
+
+    <div class="mfa-modal">
+
+        <!-- ÍCONE -->
+        <div class="mfa-icon-wrapper">
+
+            <svg
+                class="mfa-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+
+                <rect
+                    x="5"
+                    y="11"
+                    width="14"
+                    height="10"
+                    rx="2"
+                ></rect>
+
+                <path
+                    d="M8 11V7a4 4 0 0 1 8 0v4"
+                ></path>
+
+            </svg>
+
+        </div>
+
+
+        <!-- CABEÇALHO -->
+        <div class="mfa-header">
+
+            <h2 id="mfaTitle">
+                Verificação de segurança
+            </h2>
+
+            <p class="mfa-description">
+                Enviamos um código de 6 dígitos para o seu e-mail.
+            </p>
+
+        </div>
+
+
+        <!-- FORMULÁRIO MFA -->
+        <form
+            method="post"
+            id="mfaForm"
+            autocomplete="off"
+        >
+
+            {% csrf_token %}
+
+            <input
+                type="hidden"
+                name="action"
+                value="verify_mfa"
+            >
+
+
+            <!-- ERRO MFA -->
+            {% if mfa_error %}
+
+                <div
+                    class="mfa-error"
+                    role="alert"
+                >
+                    {{ mfa_error }}
+                </div>
+
+            {% endif %}
+
+
+            <!-- CÓDIGO -->
+            <div class="mfa-code-wrapper">
+
+                <label
+                    for="mfaCode"
+                    class="form-label"
+                >
+                    Código de verificação
+                </label>
+
+                <input
+                    type="text"
+                    name="code"
+                    id="mfaCode"
+                    class="mfa-code-input"
+
+                    maxlength="6"
+                    minlength="6"
+
+                    inputmode="numeric"
+
+                    autocomplete="one-time-code"
+
+                    placeholder="000000"
+
+                    required
+                >
+
+            </div>
+
+
+            <!-- CONFIRMAR -->
+            <button
+                type="submit"
+                class="mfa-confirm-button"
+            >
+                Confirmar código
+            </button>
+
+
+            <p class="mfa-expiration">
+                O código expira em 10 minutos.
+            </p>
+
+        </form>
+
+
+        <!-- VOLTAR -->
+        <div class="mfa-footer">
+
+            <button
+                type="button"
+                class="mfa-back-button"
+                id="closeMfaButton"
+            >
+                Voltar ao login
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        /* =========================
+           MOSTRAR / OCULTAR SENHA
+        ========================== */
+
+        const passwordInput =
+            document.getElementById('id_password');
+
+        const passwordToggle =
+            document.getElementById('passwordToggle');
+
+
+        if (passwordInput && passwordToggle) {
+
+            passwordToggle.addEventListener(
+                'click',
+                function () {
+
+                    const passwordVisible =
+                        passwordInput.type === 'text';
+
+                    passwordInput.type =
+                        passwordVisible
+                            ? 'password'
+                            : 'text';
+
+
+                    passwordToggle.setAttribute(
+                        'aria-label',
+                        passwordVisible
+                            ? 'Mostrar senha'
+                            : 'Ocultar senha'
+                    );
+
+
+                    passwordToggle.setAttribute(
+                        'title',
+                        passwordVisible
+                            ? 'Mostrar senha'
+                            : 'Ocultar senha'
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =========================
+           ELEMENTOS MFA
+        ========================== */
+
+        const mfaOverlay =
+            document.getElementById('mfaOverlay');
+
+        const mfaCode =
+            document.getElementById('mfaCode');
+
+        const mfaForm =
+            document.getElementById('mfaForm');
+
+        const closeMfaButton =
+            document.getElementById('closeMfaButton');
+
+
+        /* =========================
+           ABRIR MODAL
+        ========================== */
+
+        if (mfaOverlay) {
+
+            const shouldShowMfa =
+                mfaOverlay.dataset.showMfa === 'true';
+
+
+            if (shouldShowMfa) {
+
+                mfaOverlay.classList.add('active');
+
+                mfaOverlay.setAttribute(
+                    'aria-hidden',
+                    'false'
+                );
+
+                document.body.classList.add(
+                    'mfa-open'
+                );
+
+
+                if (mfaCode) {
+
+                    setTimeout(
+                        function () {
+                            mfaCode.focus();
+                        },
+                        150
+                    );
+
+                }
+
+            }
+
+        }
+
+
+        /* =========================
+           SOMENTE NÚMEROS
+        ========================== */
+
+        if (mfaCode) {
+
+            mfaCode.addEventListener(
+                'input',
+                function () {
+
+                    this.value = this.value
+                        .replace(/\D/g, '')
+                        .slice(0, 6);
+
+                    this.setCustomValidity('');
+
+                }
+            );
+
+
+            /* =========================
+               COLAR CÓDIGO
+            ========================== */
+
+            mfaCode.addEventListener(
+                'paste',
+                function (event) {
+
+                    event.preventDefault();
+
+                    const clipboard =
+                        event.clipboardData ||
+                        window.clipboardData;
+
+                    const pastedText =
+                        clipboard.getData('text');
+
+
+                    this.value = pastedText
+                        .replace(/\D/g, '')
+                        .slice(0, 6);
+
+                }
+            );
+
+        }
+
+
+        /* =========================
+           VALIDAR ANTES DE ENVIAR
+        ========================== */
+
+        if (mfaForm && mfaCode) {
+
+            mfaForm.addEventListener(
+                'submit',
+                function (event) {
+
+                    const code =
+                        mfaCode.value.trim();
+
+
+                    if (!/^\d{6}$/.test(code)) {
+
+                        event.preventDefault();
+
+                        mfaCode.setCustomValidity(
+                            'Digite os 6 números do código.'
+                        );
+
+                        mfaCode.reportValidity();
+
+                        mfaCode.focus();
+
+                        return;
+                    }
+
+
+                    mfaCode.setCustomValidity('');
+
+                }
+            );
+
+        }
+
+
+        /* =========================
+           FECHAR MODAL
+        ========================== */
+
+        if (closeMfaButton && mfaOverlay) {
+
+            closeMfaButton.addEventListener(
+                'click',
+                function () {
+
+                    mfaOverlay.classList.remove(
+                        'active'
+                    );
+
+                    mfaOverlay.setAttribute(
+                        'aria-hidden',
+                        'true'
+                    );
+
+                    document.body.classList.remove(
+                        'mfa-open'
+                    );
+
+
+                    if (mfaCode) {
+                        mfaCode.value = '';
+                    }
+
+
+                    const emailInput =
+                        document.getElementById(
+                            'id_username'
+                        );
+
+
+                    if (emailInput) {
+                        emailInput.focus();
+                    }
+
+                }
+            );
+
+        }
+
+    });
+</script>
+
+{% endblock %}

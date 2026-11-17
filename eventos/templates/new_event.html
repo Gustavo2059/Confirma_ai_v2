@@ -1,0 +1,1171 @@
+{% extends "base.html" %}
+
+
+{% block title %}Novo Evento{% endblock %}
+
+
+{% block page_title %}Novo Evento{% endblock %}
+
+
+{% block extra_css %}
+<style>
+    .form-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 64px);
+        padding: 20px;
+    }
+
+
+    .form-card {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 8px 40px rgba(15, 43, 69, 0.12);
+        width: 100%;
+        max-width: 520px;
+        overflow: hidden;
+    }
+
+
+    .form-header {
+        background: linear-gradient(135deg, #0f2b45, #1a4971);
+        color: #fff;
+        padding: 32px 40px 24px;
+        text-align: center;
+    }
+
+
+    .form-header .icon {
+        font-size: 2.5rem;
+        margin-bottom: 8px;
+    }
+
+
+    .form-header h2 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+
+    .form-header p {
+        font-size: 0.82rem;
+        opacity: 0.7;
+    }
+
+
+    .form-body {
+        padding: 32px 40px 40px;
+    }
+
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+
+    .form-body label {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 6px;
+    }
+
+
+    .form-body input[type="text"],
+    .form-body input[type="date"],
+    .form-body input[type="time"],
+    .form-body input[type="datetime-local"],
+    .form-body input[type="number"],
+    .form-body input[type="email"],
+    .form-body input[type="url"],
+    .form-body textarea,
+    .form-body select {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #d0dce8;
+        border-radius: 10px;
+        font-size: 0.92rem;
+        font-family: 'Inter', sans-serif;
+        outline: none;
+        transition:
+            border-color 0.2s,
+            box-shadow 0.2s,
+            background 0.2s;
+        background: #f8fbfe;
+        color: #2c3e50;
+        box-sizing: border-box;
+    }
+
+
+    .form-body input:focus,
+    .form-body textarea:focus,
+    .form-body select:focus {
+        border-color: #4fc3f7;
+        box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.15);
+        background: #fff;
+    }
+
+
+    .form-body textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+
+    /* Horários */
+    .time-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+
+    /* Número + Complemento */
+    .address-row {
+        display: grid;
+        grid-template-columns: 0.7fr 1.5fr;
+        gap: 12px;
+    }
+
+
+    /* Cidade + UF */
+    .city-row {
+        display: grid;
+        grid-template-columns: 1fr 90px;
+        gap: 12px;
+    }
+
+
+    .address-section {
+        margin-top: 4px;
+        padding-top: 4px;
+    }
+
+
+    /* Feedback do ViaCEP */
+    .cep-feedback {
+        min-height: 18px;
+        margin-top: 6px;
+        font-size: 0.78rem;
+        font-weight: 500;
+    }
+
+
+    .cep-feedback.loading {
+        color: #64748b;
+    }
+
+
+    .cep-feedback.success {
+        color: #15803d;
+    }
+
+
+    .cep-feedback.warning {
+        color: #b45309;
+    }
+
+
+    .cep-feedback.error {
+        color: #dc2626;
+    }
+
+
+    /* Estado visual enquanto consulta o CEP */
+    #id_cep.cep-loading {
+        border-color: #94a3b8;
+        background: #f8fafc;
+    }
+
+
+    #id_cep.cep-success {
+        border-color: #86c89a;
+    }
+
+
+    #id_cep.cep-error {
+        border-color: #f0a3a3;
+    }
+
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 8px;
+    }
+
+
+    .btn-submit {
+        flex: 1;
+        padding: 14px;
+        background: linear-gradient(135deg, #1a4971, #0f2b45);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        font-family: 'Inter', sans-serif;
+        cursor: pointer;
+        transition: all 0.25s;
+        box-shadow: 0 4px 16px rgba(15, 43, 69, 0.25);
+    }
+
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 24px rgba(15, 43, 69, 0.35);
+        background: linear-gradient(135deg, #2196F3, #1a4971);
+    }
+
+
+    .btn-back {
+        padding: 14px 20px;
+        background: #f0f4f8;
+        color: #1a4971;
+        border: 2px solid #d0dce8;
+        border-radius: 12px;
+        font-size: 0.92rem;
+        font-weight: 600;
+        font-family: 'Inter', sans-serif;
+        text-decoration: none;
+        text-align: center;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+
+    .btn-back:hover {
+        background: #dceaf7;
+        border-color: #4fc3f7;
+    }
+
+
+    .form-body .errorlist {
+        list-style: none;
+        padding: 0;
+        margin: 4px 0 0;
+    }
+
+
+    .form-body .errorlist li {
+        background: #fef2f2;
+        color: #dc2626;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 0.78rem;
+        border-left: 3px solid #dc2626;
+        margin-top: 6px;
+    }
+
+
+    .form-body .nonfield {
+        margin-bottom: 18px;
+    }
+
+
+    @media (max-width: 480px) {
+
+        .form-body {
+            padding: 24px 20px 28px;
+        }
+
+
+        .form-header {
+            padding: 24px 20px 20px;
+        }
+
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+
+        .time-row,
+        .address-row,
+        .city-row {
+            grid-template-columns: 1fr;
+        }
+    }
+
+
+    /* Feedback enquanto o evento e os e-mails são processados */
+    .submit-loading-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: rgba(15, 43, 69, 0.68);
+        backdrop-filter: blur(3px);
+    }
+
+
+    .submit-loading-overlay.is-visible {
+        display: flex;
+    }
+
+
+    .submit-loading-box {
+        width: min(100%, 360px);
+        padding: 32px 28px;
+        border-radius: 18px;
+        background: #fff;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        text-align: center;
+    }
+
+
+    .loading-spinner {
+        width: 45px;
+        height: 45px;
+        margin: 0 auto 20px;
+        border: 5px solid #dbeafe;
+        border-top-color: #1a4971;
+        border-radius: 50%;
+        animation: spin 0.9s linear infinite;
+    }
+
+
+    .submit-loading-box h3 {
+        margin: 0;
+        color: #0f2b45;
+        font-size: 20px;
+    }
+
+
+    .submit-loading-box p {
+        margin: 10px 0 0;
+        color: #64748b;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+
+    .btn-submit:disabled {
+        cursor: wait;
+        opacity: 0.75;
+    }
+
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="form-wrapper">
+
+    <div class="form-card">
+
+        <!-- Cabeçalho -->
+        <div class="form-header">
+
+            <div class="icon">📅</div>
+
+            <h2>Cadastrar novo evento</h2>
+
+            <p>
+                Preencha os dados abaixo para criar um evento
+            </p>
+
+        </div>
+
+
+        <!-- Formulário -->
+        <div class="form-body">
+
+            <form
+                method="post"
+                id="event-form"
+                novalidate
+            >
+
+                {% csrf_token %}
+
+
+                <!-- Erros gerais -->
+                {% if form.non_field_errors %}
+
+                    <div class="nonfield">
+                        {{ form.non_field_errors }}
+                    </div>
+
+                {% endif %}
+
+
+                <!-- Nome -->
+                <div class="form-group">
+
+                    <label for="{{ form.name.id_for_label }}">
+                        Nome do evento
+                    </label>
+
+                    {{ form.name }}
+
+                    {{ form.name.errors }}
+
+                </div>
+
+
+                <!-- Data -->
+                <div class="form-group">
+
+                    <label for="{{ form.date.id_for_label }}">
+                        Data
+                    </label>
+
+                    {{ form.date }}
+
+                    {{ form.date.errors }}
+
+                </div>
+
+
+                <!-- Horários -->
+                <div class="time-row">
+
+                    <div class="form-group">
+
+                        <label for="{{ form.start_time.id_for_label }}">
+                            Horário inicial
+                        </label>
+
+                        {{ form.start_time }}
+
+                        {{ form.start_time.errors }}
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="{{ form.end_time.id_for_label }}">
+                            Horário final
+                        </label>
+
+                        {{ form.end_time }}
+
+                        {{ form.end_time.errors }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Endereço -->
+                <div class="address-section">
+
+
+                    <!-- CEP -->
+                    <div class="form-group">
+
+                        <label for="{{ form.cep.id_for_label }}">
+                            CEP
+                        </label>
+
+                        {{ form.cep }}
+
+                        {{ form.cep.errors }}
+
+                        <div
+                            id="cep-feedback"
+                            class="cep-feedback"
+                            aria-live="polite"
+                        ></div>
+
+                    </div>
+
+
+                    <!-- Logradouro -->
+                    <div class="form-group">
+
+                        <label for="{{ form.location.id_for_label }}">
+                            Endereço
+                        </label>
+
+                        {{ form.location }}
+
+                        {{ form.location.errors }}
+
+                    </div>
+
+
+                    <!-- Número + Complemento -->
+                    <div class="address-row">
+
+                        <div class="form-group">
+
+                            <label for="{{ form.number.id_for_label }}">
+                                Número
+                            </label>
+
+                            {{ form.number }}
+
+                            {{ form.number.errors }}
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="{{ form.complement.id_for_label }}">
+                                Complemento
+                            </label>
+
+                            {{ form.complement }}
+
+                            {{ form.complement.errors }}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Bairro -->
+                    <div class="form-group">
+
+                        <label for="{{ form.neighborhood.id_for_label }}">
+                            Bairro
+                        </label>
+
+                        {{ form.neighborhood }}
+
+                        {{ form.neighborhood.errors }}
+
+                    </div>
+
+
+                    <!-- Cidade + UF -->
+                    <div class="city-row">
+
+                        <div class="form-group">
+
+                            <label for="{{ form.city.id_for_label }}">
+                                Cidade
+                            </label>
+
+                            {{ form.city }}
+
+                            {{ form.city.errors }}
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="{{ form.state.id_for_label }}">
+                                UF
+                            </label>
+
+                            {{ form.state }}
+
+                            {{ form.state.errors }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Descrição -->
+                <div class="form-group">
+
+                    <label for="{{ form.description.id_for_label }}">
+                        Descrição
+                    </label>
+
+                    {{ form.description }}
+
+                    {{ form.description.errors }}
+
+                </div>
+
+
+                <!-- Ações -->
+                <div class="form-actions">
+
+                    <a
+                        href="{% url 'list_event' %}"
+                        class="btn-back"
+                    >
+                        ← Voltar
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="btn-submit"
+                        id="submit-event"
+                    >
+                        💾 Salvar evento
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    id="submit-loading-overlay"
+    class="submit-loading-overlay"
+    role="status"
+    aria-live="assertive"
+    aria-hidden="true"
+>
+    <div class="submit-loading-box">
+        <div class="loading-spinner" aria-hidden="true"></div>
+        <h3>Enviando evento...</h3>
+        <p>
+            Estamos criando o evento e enviando os convites por e-mail.
+            Aguarde, isso pode levar alguns instantes.
+        </p>
+    </div>
+</div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    /*
+     * =========================================================
+     * CAMPOS
+     * =========================================================
+     */
+
+    const form = document.getElementById("event-form");
+
+    const submitButton =
+        document.getElementById("submit-event");
+
+    const submitLoadingOverlay =
+        document.getElementById("submit-loading-overlay");
+
+    const cepInput =
+        document.getElementById("id_cep");
+
+    const locationInput =
+        document.getElementById("id_location");
+
+    const numberInput =
+        document.getElementById("id_number");
+
+    const complementInput =
+        document.getElementById("id_complement");
+
+    const neighborhoodInput =
+        document.getElementById("id_neighborhood");
+
+    const cityInput =
+        document.getElementById("id_city");
+
+    const stateInput =
+        document.getElementById("id_state");
+
+    const feedback =
+        document.getElementById("cep-feedback");
+
+
+    /*
+     * Se por algum motivo o campo CEP não existir,
+     * não executamos o restante do JavaScript.
+     */
+    if (!cepInput) {
+        return;
+    }
+
+
+    /*
+     * Guarda o último CEP pesquisado para evitar
+     * consultas repetidas desnecessariamente.
+     */
+    let ultimoCepConsultado = null;
+
+
+    /*
+     * =========================================================
+     * FUNÇÕES AUXILIARES
+     * =========================================================
+     */
+
+
+    /*
+     * Deixa somente números.
+     *
+     * 88750-000
+     *
+     * vira
+     *
+     * 88750000
+     */
+    function somenteNumeros(valor) {
+
+        return valor.replace(/\D/g, "");
+
+    }
+
+
+    /*
+     * Máscara visual do CEP.
+     *
+     * 88750000
+     *
+     * vira
+     *
+     * 88750-000
+     */
+    function formatarCep(valor) {
+
+        const numeros = somenteNumeros(valor)
+            .slice(0, 8);
+
+
+        if (numeros.length > 5) {
+
+            return (
+                numeros.slice(0, 5)
+                + "-"
+                + numeros.slice(5)
+            );
+
+        }
+
+
+        return numeros;
+
+    }
+
+
+    /*
+     * Mostra mensagens abaixo do CEP.
+     */
+    function mostrarFeedback(
+        mensagem,
+        tipo = ""
+    ) {
+
+        if (!feedback) {
+            return;
+        }
+
+
+        feedback.textContent = mensagem;
+
+        feedback.className = "cep-feedback";
+
+
+        if (tipo) {
+            feedback.classList.add(tipo);
+        }
+
+    }
+
+
+    /*
+     * Remove os estilos de situação do CEP.
+     */
+    function limparEstadoCep() {
+
+        cepInput.classList.remove(
+            "cep-loading",
+            "cep-success",
+            "cep-error"
+        );
+
+    }
+
+
+    /*
+     * Limpa somente os campos preenchidos
+     * automaticamente pelo ViaCEP.
+     *
+     * Número e complemento não são apagados.
+     */
+    function limparEnderecoAutomatico() {
+
+        if (locationInput) {
+            locationInput.value = "";
+        }
+
+        if (neighborhoodInput) {
+            neighborhoodInput.value = "";
+        }
+
+        if (cityInput) {
+            cityInput.value = "";
+        }
+
+        if (stateInput) {
+            stateInput.value = "";
+        }
+
+    }
+
+
+    /*
+     * =========================================================
+     * CONSULTA VIACEP
+     * =========================================================
+     */
+
+    async function buscarCep(cep) {
+
+        /*
+         * Só trabalha com 8 números.
+         */
+        if (cep.length !== 8) {
+            return;
+        }
+
+
+        /*
+         * Evita consultar o mesmo CEP novamente.
+         */
+        if (cep === ultimoCepConsultado) {
+            return;
+        }
+
+
+        ultimoCepConsultado = cep;
+
+
+        limparEstadoCep();
+
+        cepInput.classList.add("cep-loading");
+
+
+        mostrarFeedback(
+            "Buscando endereço...",
+            "loading"
+        );
+
+
+        try {
+
+            const response = await fetch(
+                `https://viacep.com.br/ws/${cep}/json/`
+            );
+
+
+            /*
+             * Erro HTTP.
+             */
+            if (!response.ok) {
+
+                throw new Error(
+                    `Erro HTTP ${response.status}`
+                );
+
+            }
+
+
+            const dados = await response.json();
+
+
+            /*
+             * CEP válido no formato,
+             * porém inexistente.
+             */
+            if (dados.erro === true) {
+
+                limparEnderecoAutomatico();
+
+                limparEstadoCep();
+
+                cepInput.classList.add("cep-error");
+
+
+                mostrarFeedback(
+                    "CEP não encontrado. Verifique os números digitados.",
+                    "error"
+                );
+
+
+                ultimoCepConsultado = null;
+
+                return;
+
+            }
+
+
+            /*
+             * =================================================
+             * PREENCHE OS CAMPOS
+             * =================================================
+             */
+
+            if (locationInput) {
+
+                locationInput.value =
+                    dados.logradouro || "";
+
+            }
+
+
+            if (neighborhoodInput) {
+
+                neighborhoodInput.value =
+                    dados.bairro || "";
+
+            }
+
+
+            if (cityInput) {
+
+                cityInput.value =
+                    dados.localidade || "";
+
+            }
+
+
+            if (stateInput) {
+
+                stateInput.value =
+                    dados.uf || "";
+
+            }
+
+
+            limparEstadoCep();
+
+            cepInput.classList.add("cep-success");
+
+
+            /*
+             * Alguns CEPs são gerais e não possuem
+             * logradouro ou bairro específico.
+             */
+            const enderecoIncompleto =
+                !dados.logradouro ||
+                !dados.bairro;
+
+
+            if (enderecoIncompleto) {
+
+                mostrarFeedback(
+                    "CEP encontrado. Complete os campos de endereço que estiverem vazios.",
+                    "warning"
+                );
+
+            } else {
+
+                mostrarFeedback(
+                    "Endereço encontrado.",
+                    "success"
+                );
+
+            }
+
+
+            /*
+             * Após encontrar o endereço,
+             * envia o cursor para Número.
+             */
+            if (numberInput) {
+
+                numberInput.focus();
+
+            }
+
+        }
+
+        catch (error) {
+
+            limparEstadoCep();
+
+            cepInput.classList.add("cep-error");
+
+
+            mostrarFeedback(
+                "Não foi possível consultar o CEP agora. Você pode preencher o endereço manualmente.",
+                "error"
+            );
+
+
+            /*
+             * Permite tentar o mesmo CEP novamente.
+             */
+            ultimoCepConsultado = null;
+
+
+            console.error(
+                "Erro ao consultar ViaCEP:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /*
+     * =========================================================
+     * MÁSCARA DO CEP
+     * =========================================================
+     */
+
+
+    /*
+     * Caso o formulário tenha voltado do Django
+     * por causa de algum erro de validação,
+     * aplica novamente a máscara.
+     */
+    cepInput.value =
+        formatarCep(cepInput.value);
+
+
+    /*
+     * Enquanto o usuário digita.
+     */
+    cepInput.addEventListener(
+        "input",
+        function () {
+
+            /*
+             * Aplica máscara.
+             */
+            this.value =
+                formatarCep(this.value);
+
+
+            const cep =
+                somenteNumeros(this.value);
+
+
+            limparEstadoCep();
+
+
+            /*
+             * Se ainda não terminou de digitar,
+             * remove a mensagem.
+             */
+            if (cep.length < 8) {
+
+                mostrarFeedback("");
+
+                /*
+                 * Permite consultar novamente
+                 * depois que terminar.
+                 */
+                if (cep !== ultimoCepConsultado) {
+                    ultimoCepConsultado = null;
+                }
+
+                return;
+
+            }
+
+
+            /*
+             * Chegou aos oito números.
+             */
+            if (cep.length === 8) {
+
+                buscarCep(cep);
+
+            }
+
+        }
+    );
+
+
+    /*
+     * =========================================================
+     * EVENTO BLUR
+     * =========================================================
+     *
+     * Caso o navegador/preenchimento automático coloque
+     * o CEP sem disparar corretamente o input.
+     */
+    cepInput.addEventListener(
+        "blur",
+        function () {
+
+            const cep =
+                somenteNumeros(this.value);
+
+
+            if (cep.length === 8) {
+
+                buscarCep(cep);
+
+            }
+
+        }
+    );
+
+
+    /*
+     * =========================================================
+     * ENVIO PARA O DJANGO
+     * =========================================================
+     *
+     * Na tela:
+     *
+     * 88750-000
+     *
+     * No POST:
+     *
+     * 88750000
+     */
+    if (form) {
+
+        form.addEventListener(
+            "submit",
+            function () {
+
+                cepInput.value =
+                    somenteNumeros(
+                        cepInput.value
+                    );
+
+
+                /*
+                 * Normaliza UF antes de enviar.
+                 */
+                if (stateInput) {
+
+                    stateInput.value =
+                        stateInput.value
+                            .trim()
+                            .toUpperCase();
+
+                }
+
+
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.textContent = "Enviando...";
+                }
+
+
+                if (submitLoadingOverlay) {
+                    submitLoadingOverlay.classList.add("is-visible");
+                    submitLoadingOverlay.setAttribute("aria-hidden", "false");
+                }
+
+            }
+        );
+
+    }
+
+});
+</script>
+
+{% endblock %}

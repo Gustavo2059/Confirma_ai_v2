@@ -1,0 +1,1254 @@
+{% load static %}
+
+{% block extra_css %}
+<style>
+    /* =====================================================
+       PÁGINA
+    ====================================================== */
+
+    .register-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        min-height: calc(100vh - 64px);
+        padding: 32px 20px;
+
+        box-sizing: border-box;
+    }
+
+
+    /* =====================================================
+       CARD
+    ====================================================== */
+
+    .register-card {
+        position: relative;
+
+        width: 100%;
+        max-width: 540px;
+
+        background: #ffffff;
+
+        border: 1px solid rgba(15, 43, 69, 0.06);
+        border-radius: 22px;
+
+        box-shadow:
+            0 10px 40px rgba(15, 43, 69, 0.10),
+            0 2px 8px rgba(15, 43, 69, 0.04);
+
+        overflow: hidden;
+    }
+
+
+    /* Faixa superior decorativa */
+    .register-card::before {
+        content: "";
+
+        display: block;
+
+        width: 100%;
+        height: 6px;
+
+        background: linear-gradient(
+            90deg,
+            #0f2b45 0%,
+            #1a4971 55%,
+            #2196f3 100%
+        );
+    }
+
+
+    .register-content {
+        padding: 42px 42px 36px;
+    }
+
+
+    /* =====================================================
+       CABEÇALHO
+    ====================================================== */
+
+    .register-header {
+        text-align: center;
+
+        margin-bottom: 32px;
+    }
+
+
+    .register-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 56px;
+        height: 56px;
+
+        margin: 0 auto 16px;
+
+        border-radius: 16px;
+
+        background: linear-gradient(
+            135deg,
+            rgba(33, 150, 243, 0.12),
+            rgba(15, 43, 69, 0.08)
+        );
+
+        color: #1a4971;
+    }
+
+
+    .register-icon svg {
+        width: 27px;
+        height: 27px;
+    }
+
+
+    .register-header h2 {
+        margin: 0 0 7px;
+
+        color: #0f2b45;
+
+        font-size: 1.55rem;
+        font-weight: 750;
+
+        letter-spacing: -0.3px;
+    }
+
+
+    .register-subtitle {
+        max-width: 360px;
+
+        margin: 0 auto;
+
+        color: #7a8b9a;
+
+        font-size: 0.88rem;
+        line-height: 1.55;
+    }
+
+
+    /* =====================================================
+       FORMULÁRIO
+    ====================================================== */
+
+    .register-form {
+        width: 100%;
+    }
+
+
+    .form-row {
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 14px;
+    }
+
+
+    .form-group {
+        margin-bottom: 19px;
+    }
+
+
+    .form-label {
+        display: block;
+
+        margin-bottom: 7px;
+
+        color: #263c50;
+
+        font-size: 0.82rem;
+        font-weight: 650;
+    }
+
+
+    .required-marker {
+        color: #dc2626;
+
+        margin-left: 2px;
+    }
+
+
+    /* =====================================================
+       INPUTS DO DJANGO
+    ====================================================== */
+
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="password"] {
+        display: block;
+
+        width: 100%;
+        height: 49px;
+
+        padding: 0 15px;
+
+        border: 1.5px solid #d5e0ea;
+        border-radius: 11px;
+
+        background: #f8fbfd;
+
+        color: #20364a;
+
+        font-family:
+            'Inter',
+            Arial,
+            Helvetica,
+            sans-serif;
+
+        font-size: 0.92rem;
+
+        outline: none;
+
+        box-sizing: border-box;
+
+        transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease,
+            background-color 0.2s ease,
+            transform 0.1s ease;
+    }
+
+
+    .form-group input::placeholder {
+        color: #9daab7;
+    }
+
+
+    .form-group input:hover {
+        border-color: #b8c9d8;
+    }
+
+
+    .form-group input:focus {
+        border-color: #2196f3;
+
+        background: #ffffff;
+
+        box-shadow:
+            0 0 0 4px rgba(33, 150, 243, 0.10);
+    }
+
+
+    /* Autofill do navegador */
+    .form-group input:-webkit-autofill,
+    .form-group input:-webkit-autofill:hover,
+    .form-group input:-webkit-autofill:focus {
+        -webkit-text-fill-color: #20364a;
+
+        box-shadow:
+            0 0 0 1000px #f8fbfd inset;
+
+        transition:
+            background-color 9999s ease-in-out 0s;
+    }
+
+
+    /* =====================================================
+       ERROS
+    ====================================================== */
+
+    .field-has-error input {
+        border-color: #dc2626 !important;
+
+        background: #fffafa !important;
+    }
+
+
+    .field-has-error input:focus {
+        box-shadow:
+            0 0 0 4px rgba(220, 38, 38, 0.08);
+    }
+
+
+    .field-error {
+        margin-top: 6px;
+
+        color: #c62828;
+
+        font-size: 0.77rem;
+        line-height: 1.4;
+    }
+
+
+    .field-error div {
+        margin-top: 3px;
+    }
+
+
+    .errorlist {
+        list-style: none;
+
+        margin: 0 0 18px;
+        padding: 0;
+    }
+
+
+    .errorlist li {
+        display: flex;
+        align-items: flex-start;
+
+        margin-bottom: 7px;
+
+        padding: 11px 13px;
+
+        border: 1px solid #fecaca;
+        border-radius: 9px;
+
+        background: #fff6f6;
+
+        color: #b91c1c;
+
+        font-size: 0.81rem;
+        line-height: 1.45;
+    }
+
+
+    /* =====================================================
+       TEXTO DE AJUDA
+    ====================================================== */
+
+    .help-text {
+        margin-top: 7px;
+
+        color: #8796a5;
+
+        font-size: 0.74rem;
+        line-height: 1.45;
+    }
+
+
+    /* =====================================================
+       SENHA
+    ====================================================== */
+
+    .password-wrapper {
+        position: relative;
+    }
+
+
+    .password-wrapper input {
+        padding-right: 48px !important;
+    }
+
+
+    .password-toggle {
+        position: absolute;
+
+        top: 50%;
+        right: 10px;
+
+        transform: translateY(-50%);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 34px;
+        height: 34px;
+
+        padding: 0;
+
+        border: none;
+        border-radius: 8px;
+
+        background: transparent;
+
+        color: #7f8f9d;
+
+        cursor: pointer;
+
+        transition:
+            background-color 0.2s ease,
+            color 0.2s ease;
+    }
+
+
+    .password-toggle:hover {
+        background: #edf5fb;
+
+        color: #1a4971;
+    }
+
+
+    .password-toggle:focus-visible {
+        outline: 2px solid #4fc3f7;
+        outline-offset: 1px;
+    }
+
+
+    .password-toggle svg {
+        width: 20px;
+        height: 20px;
+    }
+
+
+    .eye-hidden {
+        display: none;
+    }
+
+
+    /* =====================================================
+       BOTÃO
+    ====================================================== */
+
+    .register-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 100%;
+        min-height: 50px;
+
+        margin-top: 7px;
+
+        padding: 14px 20px;
+
+        border: none;
+        border-radius: 12px;
+
+        background: linear-gradient(
+            135deg,
+            #1a4971 0%,
+            #0f2b45 100%
+        );
+
+        color: #ffffff;
+
+        font-family:
+            'Inter',
+            Arial,
+            Helvetica,
+            sans-serif;
+
+        font-size: 0.94rem;
+        font-weight: 700;
+
+        letter-spacing: 0.2px;
+
+        cursor: pointer;
+
+        box-shadow:
+            0 5px 16px rgba(15, 43, 69, 0.20);
+
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease,
+            background 0.2s ease;
+    }
+
+
+    .register-button:hover {
+        transform: translateY(-2px);
+
+        background: linear-gradient(
+            135deg,
+            #2196f3 0%,
+            #1a4971 100%
+        );
+
+        box-shadow:
+            0 7px 22px rgba(15, 43, 69, 0.27);
+    }
+
+
+    .register-button:active {
+        transform: translateY(0);
+    }
+
+
+    .register-button:focus-visible {
+        outline: 3px solid rgba(33, 150, 243, 0.25);
+
+        outline-offset: 3px;
+    }
+
+
+    /* =====================================================
+       DIVISOR
+    ====================================================== */
+
+    .register-divider {
+        width: 100%;
+        height: 1px;
+
+        margin: 26px 0 20px;
+
+        background: #edf1f5;
+    }
+
+
+    /* =====================================================
+       RODAPÉ
+    ====================================================== */
+
+    .register-footer {
+        text-align: center;
+
+        color: #7f8c97;
+
+        font-size: 0.82rem;
+        line-height: 1.5;
+    }
+
+
+    .register-footer a {
+        color: #1a4971;
+
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+
+    .register-footer a:hover {
+        color: #2196f3;
+
+        text-decoration: underline;
+    }
+
+
+    /* =====================================================
+       RESPONSIVO
+    ====================================================== */
+
+    @media (max-width: 600px) {
+
+        .register-wrapper {
+            padding: 15px;
+        }
+
+
+        .register-card {
+            border-radius: 18px;
+        }
+
+
+        .register-content {
+            padding: 34px 24px 28px;
+        }
+
+
+        .register-header {
+            margin-bottom: 27px;
+        }
+
+
+        .register-header h2 {
+            font-size: 1.38rem;
+        }
+
+
+        .form-row {
+            grid-template-columns: 1fr;
+
+            gap: 0;
+        }
+
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="password"] {
+            font-size: 16px;
+        }
+
+    }
+
+
+    @media (max-width: 380px) {
+
+        .register-content {
+            padding-left: 19px;
+            padding-right: 19px;
+        }
+
+    }
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="register-wrapper">
+
+    <div class="register-card">
+
+        <div class="register-content">
+
+
+            <!-- =====================================================
+                 CABEÇALHO
+            ====================================================== -->
+
+            <div class="register-header">
+
+                <div class="register-icon">
+
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M15 19.128a9.38 9.38 0 002.625.372
+                               9.337 9.337 0 004.121-.952
+                               4.125 4.125 0 00-7.533-2.493
+                               M15 19.128v-.003
+                               c0-1.113-.285-2.16-.786-3.07
+                               M15 19.128v.106
+                               A12.318 12.318 0 018.624 21
+                               c-2.331 0-4.512-.645-6.374-1.766
+                               l-.001-.109
+                               a6.375 6.375 0 0111.964-3.07
+                               M12 6.375
+                               a3.375 3.375 0 11-6.75 0
+                               3.375 3.375 0 016.75 0
+                               Z
+                               M20.25 8.625
+                               v6.75
+                               M23.625 12
+                               h-6.75"
+                        />
+                    </svg>
+
+                </div>
+
+
+                <h2>
+                    Crie sua conta
+                </h2>
+
+                <p class="register-subtitle">
+                    Preencha seus dados abaixo para começar a utilizar o sistema.
+                </p>
+
+            </div>
+
+
+            <!-- =====================================================
+                 FORMULÁRIO
+            ====================================================== -->
+
+            <form
+                method="post"
+                class="register-form"
+                autocomplete="on"
+                novalidate
+            >
+
+                {% csrf_token %}
+
+
+                <!-- =================================================
+                     ERROS GERAIS
+                ================================================== -->
+
+                {% if user_form.non_field_errors %}
+
+                    <ul class="errorlist">
+
+                        {% for error in user_form.non_field_errors %}
+
+                            <li>
+                                {{ error }}
+                            </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                {% endif %}
+
+
+                <!-- =================================================
+                     NOME + SOBRENOME
+                ================================================== -->
+
+                <div class="form-row">
+
+
+                    <!-- NOME -->
+
+                    <div class="form-group {% if user_form.first_name.errors %}field-has-error{% endif %}">
+
+                        <label
+                            for="{{ user_form.first_name.id_for_label }}"
+                            class="form-label"
+                        >
+                            Nome
+                            <span class="required-marker">*</span>
+                        </label>
+
+                        {{ user_form.first_name }}
+
+                        {% if user_form.first_name.errors %}
+
+                            <div class="field-error">
+
+                                {% for error in user_form.first_name.errors %}
+
+                                    <div>
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- SOBRENOME -->
+
+                    <div class="form-group {% if user_form.last_name.errors %}field-has-error{% endif %}">
+
+                        <label
+                            for="{{ user_form.last_name.id_for_label }}"
+                            class="form-label"
+                        >
+                            Sobrenome
+                            <span class="required-marker">*</span>
+                        </label>
+
+                        {{ user_form.last_name }}
+
+                        {% if user_form.last_name.errors %}
+
+                            <div class="field-error">
+
+                                {% for error in user_form.last_name.errors %}
+
+                                    <div>
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     E-MAIL
+                ================================================== -->
+
+                <div class="form-group {% if user_form.email.errors %}field-has-error{% endif %}">
+
+                    <label
+                        for="{{ user_form.email.id_for_label }}"
+                        class="form-label"
+                    >
+                        E-mail
+                        <span class="required-marker">*</span>
+                    </label>
+
+                    {{ user_form.email }}
+
+                    {% if user_form.email.errors %}
+
+                        <div class="field-error">
+
+                            {% for error in user_form.email.errors %}
+
+                                <div>
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- =================================================
+                     SENHA
+                ================================================== -->
+
+                <div class="form-group {% if user_form.password1.errors %}field-has-error{% endif %}">
+
+                    <label
+                        for="{{ user_form.password1.id_for_label }}"
+                        class="form-label"
+                    >
+                        Senha
+                        <span class="required-marker">*</span>
+                    </label>
+
+
+                    <div class="password-wrapper">
+
+                        {{ user_form.password1 }}
+
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            data-password-target="{{ user_form.password1.id_for_label }}"
+                            aria-label="Mostrar senha"
+                            title="Mostrar senha"
+                        >
+
+                            <!-- OLHO ABERTO -->
+                            <svg
+                                class="eye-open"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M2.036 12.322
+                                       a1.012 1.012 0 010-.639
+                                       C3.423 7.51 7.36 4.5 12 4.5
+                                       c4.638 0 8.573 3.007 9.963 7.178
+                                       .07.207.07.431 0 .639
+                                       C20.577 16.49 16.64 19.5 12 19.5
+                                       c-4.638 0-8.573-3.007-9.963-7.178
+                                       Z"
+                                />
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M15 12
+                                       a3 3 0 11-6 0
+                                       3 3 0 016 0
+                                       Z"
+                                />
+                            </svg>
+
+
+                            <!-- OLHO FECHADO -->
+                            <svg
+                                class="eye-hidden"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M3.98 8.223
+                                       A10.477 10.477 0 001.934 12
+                                       C3.226 16.338 7.244 19.5 12 19.5
+                                       c.993 0 1.953-.138 2.863-.395
+                                       M6.228 6.228
+                                       A10.451 10.451 0 0112 4.5
+                                       c4.756 0 8.773 3.162 10.065 7.498
+                                       a10.522 10.522 0 01-4.293 5.774
+                                       M6.228 6.228
+                                       L3 3
+                                       M6.228 6.228
+                                       l3.65 3.65
+                                       M17.772 17.772
+                                       L21 21
+                                       M17.772 17.772
+                                       l-3.65-3.65
+                                       M9.878 9.878
+                                       a3 3 0 104.243 4.243"
+                                />
+                            </svg>
+
+                        </button>
+
+                    </div>
+
+
+                    {% if user_form.password1.errors %}
+
+                        <div class="field-error">
+
+                            {% for error in user_form.password1.errors %}
+
+                                <div>
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="help-text">
+                        Utilize uma senha segura, combinando letras, números e caracteres especiais.
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     CONFIRMAÇÃO DA SENHA
+                ================================================== -->
+
+                <div class="form-group {% if user_form.password2.errors %}field-has-error{% endif %}">
+
+                    <label
+                        for="{{ user_form.password2.id_for_label }}"
+                        class="form-label"
+                    >
+                        Confirmar senha
+                        <span class="required-marker">*</span>
+                    </label>
+
+
+                    <div class="password-wrapper">
+
+                        {{ user_form.password2 }}
+
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            data-password-target="{{ user_form.password2.id_for_label }}"
+                            aria-label="Mostrar senha"
+                            title="Mostrar senha"
+                        >
+
+                            <!-- OLHO ABERTO -->
+                            <svg
+                                class="eye-open"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M2.036 12.322
+                                       a1.012 1.012 0 010-.639
+                                       C3.423 7.51 7.36 4.5 12 4.5
+                                       c4.638 0 8.573 3.007 9.963 7.178
+                                       .07.207.07.431 0 .639
+                                       C20.577 16.49 16.64 19.5 12 19.5
+                                       c-4.638 0-8.573-3.007-9.963-7.178
+                                       Z"
+                                />
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M15 12
+                                       a3 3 0 11-6 0
+                                       3 3 0 016 0
+                                       Z"
+                                />
+                            </svg>
+
+
+                            <!-- OLHO FECHADO -->
+                            <svg
+                                class="eye-hidden"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M3.98 8.223
+                                       A10.477 10.477 0 001.934 12
+                                       C3.226 16.338 7.244 19.5 12 19.5
+                                       c.993 0 1.953-.138 2.863-.395
+                                       M6.228 6.228
+                                       A10.451 10.451 0 0112 4.5
+                                       c4.756 0 8.773 3.162 10.065 7.498
+                                       a10.522 10.522 0 01-4.293 5.774
+                                       M6.228 6.228
+                                       L3 3
+                                       M6.228 6.228
+                                       l3.65 3.65
+                                       M17.772 17.772
+                                       L21 21
+                                       M17.772 17.772
+                                       l-3.65-3.65
+                                       M9.878 9.878
+                                       a3 3 0 104.243 4.243"
+                                />
+                            </svg>
+
+                        </button>
+
+                    </div>
+
+
+                    {% if user_form.password2.errors %}
+
+                        <div class="field-error">
+
+                            {% for error in user_form.password2.errors %}
+
+                                <div>
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- =================================================
+                     BOTÃO
+                ================================================== -->
+
+                <button
+                    type="submit"
+                    class="register-button"
+                >
+                    Criar conta
+                </button>
+
+            </form>
+
+
+            <!-- =====================================================
+                 RODAPÉ
+            ====================================================== -->
+
+            <div class="register-divider"></div>
+
+
+            <div class="register-footer">
+
+                Já possui uma conta?
+
+                <a href="{% url 'login' %}">
+                    Entrar
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================== -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        /*
+         * Configuração automática dos campos
+         * gerados pelo Django.
+         */
+
+        const fieldSettings = {
+
+            'id_first_name': {
+                placeholder: 'Digite seu nome',
+                autocomplete: 'given-name'
+            },
+
+            'id_last_name': {
+                placeholder: 'Digite seu sobrenome',
+                autocomplete: 'family-name'
+            },
+
+            'id_email': {
+                placeholder: 'exemplo@email.com',
+                autocomplete: 'email'
+            },
+
+            'id_password1': {
+                placeholder: 'Digite sua senha',
+                autocomplete: 'new-password'
+            },
+
+            'id_password2': {
+                placeholder: 'Digite novamente sua senha',
+                autocomplete: 'new-password'
+            }
+
+        };
+
+
+        Object.entries(fieldSettings).forEach(function ([fieldId, settings]) {
+
+            const input = document.getElementById(fieldId);
+
+            if (!input) {
+                return;
+            }
+
+            input.placeholder = settings.placeholder;
+
+            input.setAttribute(
+                'autocomplete',
+                settings.autocomplete
+            );
+
+        });
+
+
+        /*
+         * Mostrar / ocultar senha
+         */
+
+        const passwordButtons =
+            document.querySelectorAll('.password-toggle');
+
+
+        passwordButtons.forEach(function (button) {
+
+            button.addEventListener('click', function () {
+
+                const targetId =
+                    button.getAttribute('data-password-target');
+
+
+                const passwordInput =
+                    document.getElementById(targetId);
+
+
+                if (!passwordInput) {
+                    return;
+                }
+
+
+                const isVisible =
+                    passwordInput.type === 'text';
+
+
+                passwordInput.type =
+                    isVisible
+                        ? 'password'
+                        : 'text';
+
+
+                /*
+                 * Ícones
+                 */
+
+                const eyeOpen =
+                    button.querySelector('.eye-open');
+
+
+                const eyeHidden =
+                    button.querySelector('.eye-hidden');
+
+
+                if (eyeOpen && eyeHidden) {
+
+                    eyeOpen.style.display =
+                        isVisible
+                            ? 'block'
+                            : 'none';
+
+
+                    eyeHidden.style.display =
+                        isVisible
+                            ? 'none'
+                            : 'block';
+
+                }
+
+
+                /*
+                 * Acessibilidade
+                 */
+
+                const label =
+                    isVisible
+                        ? 'Mostrar senha'
+                        : 'Ocultar senha';
+
+
+                button.setAttribute(
+                    'aria-label',
+                    label
+                );
+
+
+                button.setAttribute(
+                    'title',
+                    label
+                );
+
+            });
+
+        });
+
+
+        /*
+         * Remove espaços desnecessários
+         * antes do envio.
+         */
+
+        const registerForm =
+            document.querySelector('.register-form');
+
+
+        if (registerForm) {
+
+            registerForm.addEventListener('submit', function () {
+
+                const firstName =
+                    document.getElementById('id_first_name');
+
+
+                const lastName =
+                    document.getElementById('id_last_name');
+
+
+                const email =
+                    document.getElementById('id_email');
+
+
+                if (firstName) {
+                    firstName.value =
+                        firstName.value.trim();
+                }
+
+
+                if (lastName) {
+                    lastName.value =
+                        lastName.value.trim();
+                }
+
+
+                if (email) {
+                    email.value =
+                        email.value.trim().toLowerCase();
+                }
+
+            });
+
+        }
+
+    });
+</script>
+
+{% endblock %}
