@@ -4,7 +4,11 @@ Sistema criado por Vinícius Andrade e Gustavo
 Sistema web para cadastro de participantes, organização de eventos e controle de presença por QR Code. O projeto também oferece envio automático de convites por e-mail, autenticação em duas etapas, gestão de despesas e leitura de notas fiscais com IA.
 
 
-https://github.com/user-attachments/assets/eee210b4-e88d-4450-8a05-94353451df2e
+
+
+https://github.com/user-attachments/assets/e4d60ea4-5b6a-4757-b1b5-60fe3ce982b2
+
+
 
 
 ## Funcionalidades
