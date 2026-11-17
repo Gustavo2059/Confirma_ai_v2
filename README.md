@@ -1,3 +1,4 @@
+Sistema criado por Vinícius Andrade e Gustavo
 # Confirma Eventos
 
 Sistema web para cadastro de participantes, organização de eventos e controle de presença por QR Code. O projeto também oferece envio automático de convites por e-mail, autenticação em duas etapas, gestão de despesas e leitura de notas fiscais com IA.
